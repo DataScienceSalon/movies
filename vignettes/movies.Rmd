@@ -1,0 +1,99 @@
+---
+title: "Movie Rating Model and Predictor"
+author: "John James jjames@datasciencesalon.org"
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output:
+  rmdformats::readthedown:
+    highlight: kate
+    css: rmdStyles.css
+bibliography: library.bib
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r knitr_init, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
+options(knitr.table.format = "html")
+options(max.print="75", scipen=999, width = 800)
+knitr::opts_chunk$set(echo=FALSE,
+	             cache=FALSE,
+               prompt=FALSE,
+               tidy=TRUE,
+               root.dir = "..",
+               fig.height = 8,
+               fig.width = 20,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+knitr::opts_knit$set(width=100, figr.prefix = T, figr.link = T)
+knitr::knit_hooks$set(inline = function(x) {
+  prettyNum(x, big.mark=",")
+})
+```
+
+
+# Setup
+
+## Load data
+
+```{r load-data}
+load("../data/movies.Rdata")
+```
+
+
+* * *
+
+# Part 1: Data
+The data was comprised of a random sampling of 651 movies produced and released prior to 2016. For each movie, 32 features such as the movie studio that produced the movie, month the movie was released to theaters and IMDB rating. The aim here was to predict the IMDB rating for a movie. To maximize model parsimony and reduce collinearity, forward selection using adjusted $R^2$ was the chosen method of model selection. `r kfigr::figr(label = "features", prefix = TRUE, link = TRUE, type="Table")` lists the variables in the full model. 
+
+`r kfigr::figr(label = "features", prefix = TRUE, link = TRUE, type="Table")`: Full Model Features for Movie Rating Prediction 
+```{r features, echo = F, message = FALSE, warning=FALSE}
+features <- openxlsx::read.xlsx("../data/features.xlsx", sheet = 1)
+selected <- features %>% filter(sel == "yes") %>% select(Variable, Description)
+omitted <- features %>% filter(sel == "no") %>% select(Variable, Description)
+knitr::kable(selected) %>%  
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+The variables listed in  `r kfigr::figr(label = "omit", prefix = TRUE, link = TRUE, type="Table")` were not selected 
+`r kfigr::figr(label = "omit", prefix = TRUE, link = TRUE, type="Table")`: Omitted Features for Movie Rating Prediction 
+```{r omit, echo = F, message = FALSE, warning=FALSE}
+knitr::kable(omitted) %>%  
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+The title was not considered to be a predictor of movie popularity, nor was the year and day of release. Actor2 through actor5 variables were not included in the full model since the number of factor levels would produce counts below the five-count threshold for tests of independence.
+
+
+* * *
+
+# Part 2: Research question
+
+
+
+* * *
+
+# Part 3: Exploratory data analysis
+
+
+* * *
+
+# Part 4: Modeling
+
+NOTE: Insert code chunks as needed by clicking on the "Insert a new code chunk" 
+button above. Make sure that your code is visible in the project you submit. 
+Delete this note when before you submit your work.
+
+* * *
+
+# Part 5: Prediction
+
+NOTE: Insert code chunks as needed by clicking on the "Insert a new code chunk" 
+button above. Make sure that your code is visible in the project you submit. 
+Delete this note when before you submit your work.
+
+* * *
+
+# Part 6: Conclusion
+
