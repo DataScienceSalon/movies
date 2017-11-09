@@ -16,10 +16,11 @@ vignette: >
 
 ```{r knitr_init, echo=FALSE, cache=FALSE, warning=FALSE, message=FALSE}
 options(knitr.table.format = "html")
-options(max.print="75", scipen=999, width = 800)
+options(max.print=100, scipen=999, width = 800)
 knitr::opts_chunk$set(echo=FALSE,
 	             cache=FALSE,
                prompt=FALSE,
+	             eval = TRUE,
                tidy=TRUE,
                root.dir = "..",
                fig.height = 8,
@@ -42,49 +43,209 @@ knitr::knit_hooks$set(inline = function(x) {
 load("../data/movies.Rdata")
 ```
 
+## Load libraries
+```{r load-libraries}
+library(data.table)
+library(dplyr)
+library(ggplot2)
+```
+
+```{r preprocess}
+mdb  <- movies::preprocess(movies)
+```
 
 * * *
 
 # Part 1: Data
-The data was comprised of a random sampling of 651 movies produced and released prior to 2016. For each movie, 32 features such as the movie studio that produced the movie, month the movie was released to theaters and IMDB rating. The aim here was to predict the IMDB rating for a movie. To maximize model parsimony and reduce collinearity, forward selection using adjusted $R^2$ was the chosen method of model selection. `r kfigr::figr(label = "features", prefix = TRUE, link = TRUE, type="Table")` lists the variables in the full model. 
+The data were comprised of audience and critics opinions, awards, studio, and actor information from Rotten Tomatoes and IMDB for a random sample of 651 movies produced and released prior to 2016. 
 
-`r kfigr::figr(label = "features", prefix = TRUE, link = TRUE, type="Table")`: Full Model Features for Movie Rating Prediction 
-```{r features, echo = F, message = FALSE, warning=FALSE}
-features <- openxlsx::read.xlsx("../data/features.xlsx", sheet = 1)
-selected <- features %>% filter(sel == "yes") %>% select(Variable, Description)
-omitted <- features %>% filter(sel == "no") %>% select(Variable, Description)
-knitr::kable(selected) %>%  
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
+## Data Sources
+### Rotten Tomatoes
+Launched in August 1998 by Senh Duong, Rotten Tomatoes is an American review aggregation website for film and television. 
 
-The variables listed in  `r kfigr::figr(label = "omit", prefix = TRUE, link = TRUE, type="Table")` were not selected 
-`r kfigr::figr(label = "omit", prefix = TRUE, link = TRUE, type="Table")`: Omitted Features for Movie Rating Prediction 
-```{r omit, echo = F, message = FALSE, warning=FALSE}
-knitr::kable(omitted) %>%  
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
-The title was not considered to be a predictor of movie popularity, nor was the year and day of release. Actor2 through actor5 variables were not included in the full model since the number of factor levels would produce counts below the five-count threshold for tests of independence.
+### IMDB
+
+### BoxOfficeMojo
+
+## Generalizability
 
 
 * * *
 
 # Part 2: Research question
+The underlying intent of this analysis was to determine the factors that most influence box office success for a film. Since box office revenue was not among the variables included in the raw data set, a proxy variable was created. Consequently, two research questions were contemplated for this analysis:
+> Which combination of features and parameters provide the best proxy for box office success.
 
+Once this proxy response variable was created, a second research question ascertained the best predictors for this proxy variable.
+> Which features most influence the box office proxy variable.
 
 
 * * *
 
 # Part 3: Exploratory data analysis
+The exploratory data analysis (EDA) begins with a univariate analysis of variables identified as a potential response or explanatory variable. (Refer to Appendix A for the complete codebook.)  The two-part bivariate analysis first examines the relationship between box office revenue for a random sample of films and IMDB rating, number of votes, critics score, and the Rotten Tomatoes audience score. From this analysis, the box office proxy variable was created. The second part of the bivariate analysis examines the relationships between selected predictors and the box office proxy response variable.
+
+## Univariate Analysis
+```{r univariate}
+edaUni <- movies::univariate(mdb)  
+```
+Focusing in potential predictors and explanatory variables, the univariate analysis included the features listed in `r kfigr::figr(label = "features", prefix = TRUE, link = TRUE, type="Table")` below.
+
+`r kfigr::figr(label = "features", prefix = TRUE, link = TRUE, type="Table")`: Univariate analysis features
+```{r features}
+features <- openxlsx::read.xlsx("../data/features.xlsx", sheet = 1)
+features <- features %>% filter(uni == "yes") %>% select(Variable, Description)
+knitr::kable(features) %>%  
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+### Title Type
+Feature films constituted `r edaUni$type$stats$Proportion[2] * 100`% of the films in the sample. Since the focus on the analysis is on theatrical releases, TV Movies were excluded from the analysis. 
+
+```{r title_type}
+edaUni$type$plot
+```
+`r kfigr::figr(label = "title_type", prefix = TRUE, link = TRUE, type="Figure")`: Films by title type
+
+### Genre
+The drama genre represented a plurality of the releases in the sample, followed by comedy action & adventure then mystery & suspense.
+```{r genre}
+edaUni$genre$plot
+```
+`r kfigr::figr(label = "genre", prefix = TRUE, link = TRUE, type="Figure")`: Films by genre
+
+### MPAA Rating
+Rated R films accounted for over `r round(edaUni$mpaa$stats$Proportion[5] * 100, -1)`% of the releases.
+```{r mpaa}
+edaUni$mpaa$plot
+```
+`r kfigr::figr(label = "mpaa", prefix = TRUE, link = TRUE, type="Figure")`: Films by MPAA Rating
+
+### Studio
+There were `r length(unique(mdb$studio))` unique studios in the sample. The top 10 studios by number of release in sample are depicted in `r kfigr::figr(label = "studio", prefix = TRUE, link = TRUE, type="Figure")` below.
+```{r studio}
+edaUni$studio$plot
+```
+`r kfigr::figr(label = "studio", prefix = TRUE, link = TRUE, type="Figure")`: Top 10 studios by number of releases in sample
+Eight titles were not associated with any studio, and therefore were removed from downstream analysis. 
+
+### Year of Theatrical Release
+The sample includes films released between `r edaUni$year$stats$Min` and `r edaUni$year$stats$Max` with a upward trend over time which peaks around 2008. 
+```{r year}
+edaUni$year$hist
+```
+`r kfigr::figr(label = "year", prefix = TRUE, link = TRUE, type="Figure")`: Theatrical releases by year
+
+### Season of Theatrical Release
+The plurality of features in the sample were released during the fall and summer months with over `r round(edaUni$season$stats$Proportion[3], -1)`% opening in the month of December alone. It is not evident that the sample reflects the population of movie releases in the United States. 
+```{r season}
+edaUni$season$plot
+```
+`r kfigr::figr(label = "season", prefix = TRUE, link = TRUE, type="Figure")`: Theatrical releases by season
+
+### Month of Theatrical Release
+The plurality of features in the sample (`r sum(edaUni$month$stats$Proportion[c(1,6,10,12)])*100`%) were released during the months of January, June, October and December.  It is not evident that the sample reflects the population of movie releases in the United States. 
+```{r month}
+edaUni$month$plot
+```
+`r kfigr::figr(label = "month", prefix = TRUE, link = TRUE, type="Figure")`: Theatrical releases by month
+
+### Releases by IMDB Rating
+The summary statistics for IMDB ratings are:  
+`r kfigr::figr(label = "imdb_rating_stats", prefix = TRUE, link = TRUE, type="Table")`
+```{r imdb_rating_stats}
+knitr::kable(edaUni$imdbRating$stats, digits = 2) %>%  
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+As indicated by the kurtosis and skewness measures above, and as shown in `r kfigr::figr(label = "imdb_rating", prefix = TRUE, link = TRUE, type="Figure")`, the distribution of ratings is slightly left skewed. It is not evident that the sample reflects the population of movie releases in the United States. 
+```{r imdb_rating}
+edaUni$imdbRating$hist
+```
+`r kfigr::figr(label = "imdb_rating", prefix = TRUE, link = TRUE, type="Figure")`: Theatrical releases by IMDB Rating
+
+### IMDB Number of Votes
+The summary statistics for IMDB votes are:  
+`r kfigr::figr(label = "imdb_votes_stats", prefix = TRUE, link = TRUE, type="Table")`
+```{r imdb_votes_stats}
+knitr::kable(edaUni$imdbVotes$stats, digits = 2) %>%  
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+As indicated by the kurtosis and skewness measures above, and as shown in `r kfigr::figr(label = "imdb_votes", prefix = TRUE, link = TRUE, type="Figure")`, the distribution of ratings is heavily right skewed. It is not evident that the sample reflects the population of movie releases in the United States. 
+```{r imdb_votes}
+edaUni$imdbVotes$hist
+```
+`r kfigr::figr(label = "imdb_votes", prefix = TRUE, link = TRUE, type="Figure")`: IMDB Votes
+
+### Rotten Tomatoes Critics Scores
+The summary statistics for Rotten Tomatoes critics scores are:  
+`r kfigr::figr(label = "critics_score_stats", prefix = TRUE, link = TRUE, type="Table")`
+```{r critics_score_stats}
+knitr::kable(edaUni$criticsScore$stats, digits = 2) %>%  
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+`r kfigr::figr(label = "critics_score", prefix = TRUE, link = TRUE, type="Figure")` evinces a left skewed the distribution of critics scores with a plurality of ratings at approximately 75. 
+```{r critics_score}
+edaUni$criticsScore$hist
+```
+`r kfigr::figr(label = "critics_score", prefix = TRUE, link = TRUE, type="Figure")`: Rotten Tomatoes critics scores
+
+
+### Rotten Tomatoes Audience Scores
+The summary statistics for Rotten Tomatoes audience scores are:  
+`r kfigr::figr(label = "audience_score_stats", prefix = TRUE, link = TRUE, type="Table")`
+```{r audience_score_stats}
+knitr::kable(edaUni$audienceScore$stats, digits = 2) %>%  
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+The distribution of audience scores shown in `r kfigr::figr(label = "audience_score", prefix = TRUE, link = TRUE, type="Figure")` mirrors that of critics scores with slightly less spread (IQR = 30 vs that of the critics scores) 
+```{r audience_score}
+edaUni$audienceScore$hist
+```
+`r kfigr::figr(label = "audience_score", prefix = TRUE, link = TRUE, type="Figure")`: Rotten Tomatoes audience scores
+
+## Best Picture 
+Since the proportion of films nominated for and winning best picture are so small, this is not likely to be a good predictor of overall box office success. The bivariate analysis below will illuminate this further.
+
+```{r best_picture}
+gridExtra::grid.arrange(edaUni$bestPicNom$plot, edaUni$bestPicWin$plot, ncol = 2)
+```
+`r kfigr::figr(label = "best_picture", prefix = TRUE, link = TRUE, type="Figure")`: Best picture nominations and wins
+
+## Best Actor / Actress
+```{r best_actor}
+gridExtra::grid.arrange(edaUni$bestActorWin$plot, edaUni$bestActressWin$plot, ncol = 2)
+```
+`r kfigr::figr(label = "best_actor", prefix = TRUE, link = TRUE, type="Figure")`: Best actor/actress 
+
+## Best Director
+```{r best_director}
+edaUni$bestDirWin$plot
+```
+`r kfigr::figr(label = "best_director", prefix = TRUE, link = TRUE, type="Figure")`: Best actor/actress 
+
 
 
 * * *
 
 # Part 4: Modeling
+Observations included/omitted
+- title_type == TV removed
 
-NOTE: Insert code chunks as needed by clicking on the "Insert a new code chunk" 
-button above. Make sure that your code is visible in the project you submit. 
-Delete this note when before you submit your work.
+`r kfigr::figr(label = "forward", prefix = TRUE, link = TRUE, type="Table")`: Forward Selection Prediction Model
+```{r forward, results = "html"}
+#forwardSelection <- movies::forward(movies)
+#summary(forwardSelection)
+```
 
+`r kfigr::figr(label = "back", prefix = TRUE, link = TRUE, type="Table")`: Backward Elimination Prediction Model
+```{r back, results = "html"}
+#backStep <- movies::back(movies)
+#summary(backStep)
+```
 * * *
 
 # Part 5: Prediction
@@ -97,3 +258,14 @@ Delete this note when before you submit your work.
 
 # Part 6: Conclusion
 
+# Appendix
+## Appendix A: Codebook
+`r kfigr::figr(label = "codebook", prefix = TRUE, link = TRUE, type="Table")`: Movie data set codebook
+```{r codebook}
+codebook <- openxlsx::read.xlsx("../data/features.xlsx", sheet = 1)
+codebook <- codebook %>% select(Variable, Description)
+knitr::kable(codebook) %>%  
+  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+```
+
+# References

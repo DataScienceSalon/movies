@@ -5,12 +5,13 @@ Version: 0.1.0
 Authors@: person("John", "James", email = "jjames@datasciencesalon.org",
                   role = c("aut", "cre"))
 Maintainer: John James <jjames@datasciencesalon.org>
-Description: Model to predict moving ratings and to identify the top five features that most influence a movie's popularity. 
+Description: Model to predict moving ratings and to identify the top five features that most 
+    influence a movie's popularity. 
 License: MIT
 Encoding: UTF-8
 LazyData: TRUE
 Depends:
-    R (>= 3.4.1),
+    R (>= 3.4.2),
     data.table,
     dplyr,
     extrafont
@@ -18,7 +19,7 @@ Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
 Imports:
-    epitools,
+    e1071,
     formatR,
     ggplot2,
     ggthemes,
@@ -26,11 +27,7 @@ Imports:
     kableExtra,
     kfigr,
     openxlsx,
-    reshape2,
     RColorBrewer,
     stargazer,
-    statsr,
-    vcd,
-    vcdExtra
+    statsr
 RoxygenNote: 6.0.1
-

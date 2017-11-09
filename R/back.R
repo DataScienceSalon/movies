@@ -1,15 +1,15 @@
 #==============================================================================#
-#                                     mlr                                      #
+#                                     back                                     #
 #==============================================================================#
-#' mlr
+#' back
 #'
-#' \code{mlr} mlres the data set and creates data sets used
-#' for analysis.
+#' \code{back} Creates prediction model using backward elimination
 #'
 #' @author John James, \email{jjames@@datasciencesalon.org}
-#' @family xmar functions
+#' @family movies functions
 #' @export
-mlr <- function(movies) {
+back <- function(movies) {
+
 
   evalModel <- function(data, predictors) {
 
@@ -23,28 +23,18 @@ mlr <- function(movies) {
     model <- rbindlist(lapply(seq_along(predictorSet), function(x) {
       lrFormula <- formula(paste("audience_score ~ ",  paste(colnames(data)[predictorSet[[x]]$predictors], collapse=" + ")))
       eval <- summary(lm(lrFormula, data))
-      data.frame(Response = "Audience Score",
-                 Predictor = paste(colnames(data)[predictorSet[[x]]$predictors], collapse = " "),
-                 Omit = paste(colnames(data)[predictorSet[[x]]$omit], collapse = " "),
-                 iOmit = predictorSet[[x]]$omit,
+      data.frame(iOmit = predictorSet[[x]]$omit,
                  Adjusted.R2 = eval$adj.r.squared,
                  stringsAsFactors = FALSE)
     }))
-    model
-    return(model)
+    model <- model %>% filter(Adjusted.R2 == max(Adjusted.R2))
+    score <- list(
+      omit = model$iOmit,
+      AR2 = model$Adjusted.R2[1]
+    )
+    return(score)
   }
 
-  getBestModel <- function(data, predictors, baseAR2) {
-    newModels <- evalModel(data, predictors)
-    if (baseAR2 < newModels %>% summarize(max(Adjusted.R2))) {
-      omit <-  newModels %>% filter(Adjusted.R2 == max(Adjusted.R2)) %>% select(iOmit)
-      baseAR2 <- newModels %>% summarize(max(Adjusted.R2))
-      predictors <- predictors[(!(predictors %in% omit))]
-      return(getBestModel(data, predictors, baseAR2))
-    } else {
-      return(newModels)
-    }
-  }
 
   data <- movies %>% select(title_type, genre, runtime,
                             mpaa_rating, thtr_rel_month, dvd_rel_month,
@@ -53,14 +43,23 @@ mlr <- function(movies) {
                             best_actress_win, best_dir_win, top200_box,
                             audience_score)
 
+  bestAR2 <- 0
+  omits <- list()
   predictors <- c(1:15)
   lrFormula <- formula(paste("audience_score ~ ",  paste(colnames(data)[predictors], collapse=" + ")))
   baseModel <- summary(lm(lrFormula, data))
-  baseModel <- data.frame(Response = "Audience Score",
-                          Omit = "None",
-                          iOmit = NA,
-                          Adjusted.R2 = baseModel$adj.r.squared,
-                          stringsAsFactors = FALSE)
-  bestModel <- getBestModel(data, predictors, baseAR2 = baseModel$adj.r.squared)
+  newAR2 <- baseModel$adj.r.squared
+  while(bestAR2 < newAR2) {
+    bestAR2 <- newAR2
+    score <- evalModel(data, predictors)
+    omits <- c(omits, score$omit)
+    newAR2 <- score$AR2
+    predictors <- predictors[(!(predictors %in% omits))]
+  }
+  lrFormula <- formula(paste("audience_score ~ ",  paste(colnames(data)[predictors], collapse=" + ")))
+  finalModel <- lm(lrFormula, data)
+
+
+  return(finalModel)
 
 }
