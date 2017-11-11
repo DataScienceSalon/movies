@@ -11,10 +11,11 @@ bivariate(mdb)
 variable.
 }
 \seealso{
-Other movies functions: \code{\link{analyzeCategorical}},
-  \code{\link{analyzeNumeric}}, \code{\link{back}},
-  \code{\link{forward}}, \code{\link{preprocess}},
-  \code{\link{process}}, \code{\link{univariate}}
+Other movies functions: \code{\link{back}},
+  \code{\link{forward}}, \code{\link{multivariateQuant}},
+  \code{\link{preprocess}}, \code{\link{process}},
+  \code{\link{univariateQual}},
+  \code{\link{univariateQuant}}, \code{\link{univariate}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

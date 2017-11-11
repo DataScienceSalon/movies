@@ -10,10 +10,11 @@ back(movies)
 \code{back} Creates prediction model using backward elimination
 }
 \seealso{
-Other movies functions: \code{\link{analyzeCategorical}},
-  \code{\link{analyzeNumeric}}, \code{\link{bivariate}},
-  \code{\link{forward}}, \code{\link{preprocess}},
-  \code{\link{process}}, \code{\link{univariate}}
+Other movies functions: \code{\link{bivariate}},
+  \code{\link{forward}}, \code{\link{multivariateQuant}},
+  \code{\link{preprocess}}, \code{\link{process}},
+  \code{\link{univariateQual}},
+  \code{\link{univariateQuant}}, \code{\link{univariate}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

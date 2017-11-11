@@ -10,10 +10,12 @@ univariate(mdb)
 \code{univariate} Performs univariate analysis of variables
 }
 \seealso{
-Other movies functions: \code{\link{analyzeCategorical}},
-  \code{\link{analyzeNumeric}}, \code{\link{back}},
+Other movies functions: \code{\link{back}},
   \code{\link{bivariate}}, \code{\link{forward}},
-  \code{\link{preprocess}}, \code{\link{process}}
+  \code{\link{multivariateQuant}},
+  \code{\link{preprocess}}, \code{\link{process}},
+  \code{\link{univariateQual}},
+  \code{\link{univariateQuant}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

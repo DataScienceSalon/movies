@@ -11,33 +11,32 @@
 #' showing frequencies and proportions
 #'
 #' @param data Data frame or vector containing a single categorical factor variable
-#' @param what Capital case character string describing what is being printed
-#' @param varName Capital case character string containing the name of the variable for data structures
-#' @param varDesc Capital case character string containing the description of the variable for plotting
+#' @param yLab Capital case character string describing the y variable
+#' @param xLab Capital case character string containing the name of the variable x variable
 #' @param order Character c('a', 'd') indicating whether to order by frequency ascending (a), or descending (d)
 #'
-#' @returns List containing a contingency table and a stacked bar plot.
+#' @return List containing a contingency table and a stacked bar plot.
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotFreqProp <- function(data, what = "Movies", varName, varDesc = NULL, order = NULL) {
+plotFreqProp <- function(data, yLab = "Movies", xLab, order = NULL) {
 
-  varDesc <- ifelse(is.null(varDesc), varName, varDesc)
-
-  # Format Data
+    # Format Data
   df <- as.data.frame(data)
   df <- df %>%  group_by(.[[1]]) %>%
     summarize(N = n()) %>%
     mutate(Proportion = round(N / sum(N), 2),
            Cumulative = round(cumsum(Proportion), 2),
            pos = N / 2)
-  colnames(df)[1] <- varName
+  colnames(df)[1] <- xLab
 
   # Order data
-  if (order == "a") {
-    df <- df %>% arrange(N)
-  } else if (order == "d") {
-    df <- df %>% arrange(desc(N))
+  if (!is.null(order)) {
+    if (order ==  "a") {
+      df <- df %>% arrange(N)
+      } else if (order == "d") {
+        df <- df %>% arrange(desc(N))
+      }
   }
 
   # Render plot
@@ -62,9 +61,9 @@ plotFreqProp <- function(data, what = "Movies", varName, varDesc = NULL, order =
                    axis.text.x = ggplot2::element_blank(),
                    legend.position = "right") +
     ggplot2::scale_fill_manual(values = myPal(length(df[[1]]))) +
-    ggplot2::ggtitle(paste(what, 'by', varDesc)) +
-    ggplot2::ylab(what) +
-    ggplot2::labs(fill = varName)
+    ggplot2::ggtitle(paste(yLab, 'by', xLab)) +
+    ggplot2::ylab(yLab) +
+    ggplot2::labs(fill = xLab)
 
     visual <- list(
       stats = df[,1:4],
@@ -82,30 +81,15 @@ plotFreqProp <- function(data, what = "Movies", varName, varDesc = NULL, order =
 #' \code{plotHist} Renders a histogram with a normal curve as well as a table
 #' of summary statistics.
 #'
-#' @param data Data frame or vector containing a single numeric variable
-#' @param what Capital case character string describing what is being printed
-#' @param varName Capital case character string containing the name of the variable for data structures
-#' @param varDesc Capital case character string containing the description of the variable for plotting
+#' @param data Data frame containing a single numeric variable
+#' @param xLab Capital case character string the group or subset of data being printed (optional)
+#' @param yLab Capital case character string describing y is being printed
 #'
-#' @returns List containing a contingency table and a stacked bar plot.
+#' @return List containing a summary statistics and a histogram
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotHist <- function(data, what = "Movies", varName, varDesc = NULL) {
-
-
-  df <- data.frame(Min = round(min(data[[1]]), 1),
-                   Q1 = round(quantile(data[[1]], 0.25), 1),
-                   Median = round(median(data[[1]]), 1),
-                   Mean = round(mean(data[[1]]), 1),
-                   Q3 = round(quantile(data[[1]], 0.75), 1),
-                   Max = round(max(data[[1]]), 1),
-                   `NA's` = sum(is.na(data[[1]])),
-                   SD = round(sd(data[[1]]), 2),
-                   IQR = round(quantile(data[[1]], 0.75) - quantile(data[[1]], 0.25) , 1),
-                   Kurtosis = e1071::kurtosis(data[[1]]),
-                   Skewness = e1071::skewness(data[[1]]),
-                   row.names = NULL)
+plotHist <- function(data, xLab = NULL, yLab) {
 
   hist <- ggplot2::ggplot(data = data,
                         ggplot2::aes(x = data[[1]])) +
@@ -114,16 +98,15 @@ plotHist <- function(data, what = "Movies", varName, varDesc = NULL) {
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
                    axis.title.x = ggplot2::element_blank(),
                    axis.ticks.x = ggplot2::element_blank()) +
-    ggplot2::ggtitle(paste(what, 'by', varName)) +
-    ggplot2::ylab(what)
+    ggplot2::ylab(yLab)
 
+    if (!is.null(xLab)) {
+    hist <- hist + ggplot2::ggtitle(paste(yLab, "by", xLab))
+  } else {
+    hist <- hist + ggplot2::ggtitle(paste(yLab))
+  }
 
-  visual <- list(
-    stats = df,
-    plot = hist
-  )
-
-  return(visual)
+  return(hist)
 }
 
 #------------------------------------------------------------------------------#
@@ -135,28 +118,15 @@ plotHist <- function(data, what = "Movies", varName, varDesc = NULL) {
 #' of summary statistics.
 #'
 #' @param data Data frame or vector containing a single numeric variable
-#' @param what Capital case character string describing what is being printed
+#' @param xLab Capital case character string containing the name of the grouping or subset variable (optional)
+#' @param yLab Capital case character string containing the name of the y variable
 #'
-#' @returns List containing a contingency table and a stacked bar plot.
+#' @return List containing a summary statistics and QQ plot
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family visualization functions
 #' @export
-plotQQ <- function(data, what = "Movies") {
+plotQQ <- function(data, xLab = NULL, yLab) {
 
-
-  # Calculate summary statistics
-  df <- data.frame(Min = round(min(data[[1]]), 1),
-                   Q1 = round(quantile(data[[1]], 0.25), 1),
-                   Median = round(median(data[[1]]), 1),
-                   Mean = round(mean(data[[1]]), 1),
-                   Q3 = round(quantile(data[[1]], 0.75), 1),
-                   Max = round(max(data[[1]]), 1),
-                   `NA's` = sum(is.na(data[[1]])),
-                   SD = round(sd(data[[1]]), 2),
-                   IQR = round(quantile(data[[1]], 0.75) - quantile(data[[1]], 0.25) , 1),
-                   Kurtosis = e1071::kurtosis(data[[1]]),
-                   Skewness = e1071::skewness(data[[1]]),
-                   row.names = NULL)
 
   # Render QQ Plot
   qq <- ggplot2::ggplot(data = data, mapping = aes(sample = data[[1]])) +
@@ -164,13 +134,107 @@ plotQQ <- function(data, what = "Movies") {
     qqplotr::stat_qq_line() +
     qqplotr::stat_qq_point() +
     ggplot2::labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
+    ggplot2::theme_minimal(base_size = 24)
+
+  if (is.null(xLab)) {
+    qq <- qq + ggplot2::ggtitle(yLab, "Normal Q-Q Plot")
+  } else {
+    qq <- qq + ggplot2::ggtitle(paste(yLab, "by", xLab))
+  }
+
+  return(qq)
+}
+
+#------------------------------------------------------------------------------#
+#                                 Boxplot                                      #
+#------------------------------------------------------------------------------#
+#' plotBox
+#'
+#' \code{plotBox} Renders a single or grouped box plot.
+#'
+#' @param data Data frame or vector containing two columns:
+#'          1: Categorical independent variable (x)
+#'          2: Numeric response variable (y)
+#' @param xLab Capital case character string containing the name of the x variable (optional)
+#' @param yLab Capital case character string containing the name of the y variable
+#'
+#' @return List containing a contingency table and a stacked bar plot.
+#' @author John James, \email{jjames@@datasciencesalon.org}
+#' @family visualization functions
+#' @export
+plotBox <- function(data, xLab = NULL, yLab) {
+
+  if (length(data) > 2) stop(paste("Error in plotBox: Dimension of data frame must be 1 or 2, not", length(data)))
+  if (length(data) == 1) {
+    data <- data.frame(x = rep("x", nrow(data)),
+                       y = data[[1]], row.names = NULL)
+  } else {
+    data <- data.frame(x = data[[1]],
+                       y = data[[2]],
+                       row.names = NULL)
+  }
+
+  # Render plot
+  myPal <- colorRampPalette(RColorBrewer::brewer.pal(11, "PiYG"))
+
+  bp <- ggplot2::ggplot(data = data,
+                             ggplot2::aes(x = data$x,
+                                          y = data$y,
+                                          fill = data$x))  +
+    ggplot2::geom_boxplot(outlier.colour = "black") +
     ggplot2::theme_minimal(base_size = 24) +
-    ggplot2::ggtitle(what, "Normal Q-Q Plot")
+    ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
+                   axis.title.x = ggplot2::element_blank(),
+                   axis.ticks.x = ggplot2::element_blank(),
+                   axis.text.x = ggplot2::element_blank(),
+                   legend.position = "right") +
+    ggplot2::scale_fill_manual(values = myPal(length(unique(data$x))))
 
-  visual <- list(
-    stats = df,
-    plot = qq
-  )
+  if (is.null(xLab)) {
+    bp <- bp + ggplot2::ggtitle(paste(yLab)) +
+      ggplot2::coord_flip() +
+      ggplot2::theme(legend.position = "none",
+                     axis.text.y = ggplot2::element_blank(),
+                     axis.title.y = ggplot2::element_blank())
+  } else {
+    bp <- bp + ggplot2::ggtitle(paste(yLab, "by", xLab)) +
+      ggplot2::labs(y = yLab, fill = xLab)
+  }
 
-  return(visual)
+  return(bp)
+}
+
+
+#------------------------------------------------------------------------------#
+#                               Plot Scatterplot                               #
+#------------------------------------------------------------------------------#
+#' plotScatter
+#'
+#' \code{plotScatter} Renders a scatterplot for two numerical variablesa
+#'
+#' @param data Data frame containing the quantitative variables
+#' @param xLab Capital case character string containing the name of the grouping or subset variable
+#' @param yLab Capital case character string containing the name of the y variable
+#'
+#' @return Scatterplot object
+#' @author John James, \email{jjames@@datasciencesalon.org}
+#' @family visualization functions
+#' @export
+plotScatter <- function(data, xLab, yLab) {
+
+  myPal <- colorRampPalette(RColorBrewer::brewer.pal(11, "PiYG"))
+
+  scatter <- ggplot2::ggplot(data = data,
+                             ggplot2::aes(x = as.numeric(unlist(data[,1])),
+                                          y = as.numeric(unlist(data[,2])))) +
+    ggplot2::geom_point() +
+    ggplot2::theme_minimal(base_size = 24) +
+    ggplot2::geom_smooth(method = lm, se = FALSE) +
+    ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
+                   legend.position = "right") +
+    ggplot2::labs(x = xLab, y = yLab) +
+    ggplot2::ggtitle(paste(yLab, 'by', xLab))
+
+  return(scatter)
+
 }

@@ -10,117 +10,29 @@
 #' @export
 univariate <- function(mdb) {
 
-  # Format Data
-  popularity <- as.data.frame(mdb %>% select(popularity))
-  title <- as.data.frame(mdb %>% select(title) %>% group_by(title) %>%
-                          summarize(N = n()) %>%
-                          mutate(p = N/ sum(N)), row.names = NULL)
-  type <- as.data.frame(mdb %>% select(title_type) %>% group_by(title_type) %>%
-                             summarize(N = n()) %>%
-                             mutate(p = N/ sum(N)), row.names = NULL)
-  genre <- as.data.frame(mdb %>% select(genre) %>% group_by(genre) %>%
-                          summarize(N = n()) %>%
-                          mutate(p = N/ sum(N)), row.names = NULL)
-  mpaa <- as.data.frame(mdb %>% select(mpaa_rating) %>% group_by(mpaa_rating) %>%
-                           summarize(N = n()) %>%
-                           mutate(p = N/ sum(N)), row.names = NULL)
-  studio <- as.data.frame(mdb %>% select(studio) %>% group_by(studio) %>%
-                          summarize(N = n()) %>%
-                          mutate(p = N/ sum(N)) %>%
-                            arrange(desc(N)), row.names = NULL)
-  year <- as.data.frame(mdb %>% select(thtr_rel_year))
-  season <- as.data.frame(mdb %>% select(thtr_rel_season) %>% group_by(thtr_rel_season) %>%
-                          summarize(N = n()) %>%
-                          mutate(p = N/ sum(N)), row.names = NULL)
-  month <- as.data.frame(mdb %>% select(thtr_rel_month) %>% group_by(thtr_rel_month) %>%
-                            summarize(N = n()) %>%
-                            mutate(p = N/ sum(N)), row.names = NULL)
-  imdbRating <- as.data.frame(mdb %>% select(imdb_rating))
-  imdbVotes <- as.data.frame(mdb %>% select(imdb_num_votes))
-  imdbLogVotes <- log2(as.data.frame(mdb %>% select(imdb_num_votes)))
-  criticsScore <- as.data.frame(mdb %>% select(critics_score))
-  audienceScore <- as.data.frame(mdb %>% select(audience_score))
-  bestPicNom <- as.data.frame(mdb %>% select(best_pic_nom) %>% group_by(best_pic_nom) %>%
-                          summarize(N = n()) %>%
-                          mutate(p = N/ sum(N)), row.names = NULL)
-  bestPicWin <- as.data.frame(mdb %>% select(best_pic_win) %>% group_by(best_pic_win) %>%
-                                summarize(N = n()) %>%
-                                mutate(p = N/ sum(N)), row.names = NULL)
-  bestActorWin <- as.data.frame(mdb %>% select(best_actor_win) %>% group_by(best_actor_win) %>%
-                                summarize(N = n()) %>%
-                                mutate(p = N/ sum(N)), row.names = NULL)
-  bestActressWin <- as.data.frame(mdb %>% select(best_actress_win) %>% group_by(best_actress_win) %>%
-                                  summarize(N = n()) %>%
-                                  mutate(p = N/ sum(N)), row.names = NULL)
-  bestDirWin <- as.data.frame(mdb %>% select(best_dir_win) %>% group_by(best_dir_win) %>%
-                                     summarize(N = n()) %>%
-                                     mutate(p = N/ sum(N)), row.names = NULL)
-  top200Box <- as.data.frame(mdb %>% select(top200_box) %>% group_by(top200_box) %>%
-                                summarize(N = n()) %>%
-                                mutate(p = N/ sum(N)), row.names = NULL)
-  director <- as.data.frame(mdb %>% select(director) %>% group_by(director) %>%
-                                 summarize(N = n()) %>%
-                                 mutate(p = N/ sum(N)) %>%
-                                 arrange(desc(N)), row.names = NULL)
-  actor1 <- as.data.frame(mdb %>% select(actor1) %>% group_by(actor1) %>%
-                              summarize(N = n()) %>%
-                              mutate(p = N/ sum(N)) %>%
-                              arrange(desc(N)), row.names = NULL)
-  actor2 <- as.data.frame(mdb %>% select(actor2) %>% group_by(actor2) %>%
-                            summarize(N = n()) %>%
-                            mutate(p = N/ sum(N)) %>%
-                            arrange(desc(N)), row.names = NULL)
-  actor3 <- as.data.frame(mdb %>% select(actor3) %>% group_by(actor3) %>%
-                            summarize(N = n()) %>%
-                            mutate(p = N/ sum(N)) %>%
-                            arrange(desc(N)), row.names = NULL)
-  actor4 <- as.data.frame(mdb %>% select(actor4) %>% group_by(actor4) %>%
-                            summarize(N = n()) %>%
-                            mutate(p = N/ sum(N)) %>%
-                            arrange(desc(N)), row.names = NULL)
-  actor5 <- as.data.frame(mdb %>% select(actor5) %>% group_by(actor5) %>%
-                            summarize(N = n()) %>%
-                            mutate(p = N/ sum(N)) %>%
-                            arrange(desc(N)), row.names = NULL)
-  studioVotes <- as.data.frame(mdb %>% select(studio_votes))
-  castVotes <- as.data.frame(mdb %>% select(cast_votes))
-  studioExperience <- as.data.frame(mdb %>% select(studio_experience))
-  directorExperience <- as.data.frame(mdb %>% select(director_experience))
-  castExperience <- as.data.frame(mdb %>% select(cast_experience))
-
-
   # Conduct Analysis
-  popularity <- analyzeNumeric(popularity, "Popularity")
-  title <- analyzeCategorical(title, "Title")
-  type <- analyzeCategorical(type, "Type")
-  genre <- analyzeCategorical(genre, "Genre")
-  mpaa <- analyzeCategorical(mpaa, "MPAA Rating")
-  studio <- analyzeCategorical(head(studio, 10), "Top 10 Studios")
-  year <- analyzeNumeric(year, "Year")
-  season <- analyzeCategorical(season, "Season")
-  month <- analyzeCategorical(month, "Month")
-  imdbRating <- analyzeNumeric(imdbRating, "IMDB Rating")
-  imdbVotes <- analyzeNumeric(imdbVotes, "IMDB Votes")
-  imdbLogVotes <- analyzeNumeric(imdbLogVotes, "IMDB Log Votes")
-  criticsScore <- analyzeNumeric(criticsScore, "Critics Scores")
-  audienceScore <- analyzeNumeric(audienceScore, "Audience Scores")
-  bestPicNom <- analyzeCategorical(bestPicNom, "Best Picture Nomination")
-  bestPicWin <- analyzeCategorical(bestPicWin, "Best Picture Oscars")
-  bestDirWin <- analyzeCategorical(bestDirWin, "Best Director Oscars")
-  bestActorWin <- analyzeCategorical(bestActorWin, "Best Actor Oscars")
-  bestActressWin <- analyzeCategorical(bestActressWin, "Best Actress Oscars")
-  top200Box <- analyzeCategorical(top200Box, "Top 200 Box Office")
-  director <- analyzeCategorical(director,25, "Directors")
-  actor1 <- analyzeCategorical(head(actor1,25), "Actor1")
-  actor2 <- analyzeCategorical(head(actor2,25), "Actor2")
-  actor3 <- analyzeCategorical(head(actor3,25), "Actor3")
-  actor4 <- analyzeCategorical(head(actor4,25), "Actor4")
-  actor5 <- analyzeCategorical(head(actor5,25), "Actor5")
-  studioVotes <- analyzeNumeric(studioVotes, "Average Studio Vote")
-  castVotes <- analyzeNumeric(castVotes, "Cast Total Vote")
-  studioExperience <- analyzeNumeric(studioExperience, "Studio Experience")
-  directorExperience <- analyzeNumeric(directorExperience, "Director Experience")
-  castExperience <- analyzeNumeric(castExperience, "Cast Experience")
+  popularity <- univariateQuant(as.data.frame(mdb$popularity), yLab = "Popularity")
+  type <- univariateQual(as.data.frame(mdb$title_type), xLab = "Title Type")
+  genre <- univariateQual(as.data.frame(mdb$genre), xLab = "Genre")
+  mpaa <- univariateQual(as.data.frame(mdb$mpaa_rating), xLab = "MPAA Rating")
+  season <- univariateQual(as.data.frame(mdb$thtr_rel_season), xLab = "Season")
+  month <- univariateQual(as.data.frame(mdb$thtr_rel_month), xLab = "Month")
+  imdbRating <- univariateQual(as.data.frame(mdb$imdb_rating), xLab = "IMDB Rating")
+  imdbVotes <- univariateQuant(as.data.frame(mdb$imdb_num_votes), yLab = "IMDB Votes")
+  imdbLogVotes <- univariateQuant(as.data.frame(log2(mdb$imdb_num_votes)), yLab = "IMDB Log Votes")
+  criticsScores <- univariateQuant(as.data.frame(mdb$critics_score), yLab = "Critics Score")
+  audienceScores <- univariateQuant(as.data.frame(mdb$critics_score), yLab = "Audience Score")
+  bestPicNom <- univariateQual(as.data.frame(mdb$best_pic_nom), xLab = "Best Picture Oscar Nomination")
+  bestPicWin <- univariateQual(as.data.frame(mdb$best_pic_win), xLab = "Best Picture Oscar")
+  bestDirWin <- univariateQual(as.data.frame(mdb$best_dir_win), xLab = "Best Director Oscar")
+  bestActorWin <- univariateQual(as.data.frame(mdb$best_actor_win), xLab = "Best Actor Oscar")
+  bestActressWin <- univariateQual(as.data.frame(mdb$best_actress_win), xLab = "Best Actress Oscar")
+  top200Box <- univariateQual(as.data.frame(mdb$top200_box), xLab = "Top 200 Box Office")
+  studioVotes <- univariateQuant(as.data.frame(mdb$studio_votes), yLab = "Studio Votes")
+  castVotes <- univariateQuant(as.data.frame(mdb$cast_votes), yLab = "Cast Votes")
+  studioExperience <- univariateQuant(as.data.frame(mdb$studio_experience), yLab = "Studio Experience")
+  directorExperience <- univariateQuant(as.data.frame(mdb$director_experience), yLab = "Director Experience")
+  castExperience <- univariateQuant(as.data.frame(mdb$cast_experience), yLab = "Cast Experience")
 
 
   # Return analysis
@@ -129,27 +41,19 @@ univariate <- function(mdb) {
     type = type,
     genre = genre,
     mpaa = mpaa,
-    studio = studio,
-    year = year,
     season = season,
     month = month,
     imdbRating = imdbRating,
     imdbVotes = imdbVotes,
     imdbLogVotes = imdbLogVotes,
-    criticsScore = criticsScore,
-    audienceScore = audienceScore,
+    criticsScores = criticsScores,
+    audienceScores = audienceScores,
     bestPicNom = bestPicNom,
     bestPicWin = bestPicWin,
     bestDirWin = bestDirWin,
     bestActorWin = bestActorWin,
     bestActressWin = bestActressWin,
     top200Box = top200Box,
-    director = director,
-    actor1 = actor1,
-    actor2 = actor2,
-    actor3 = actor3,
-    actor4 = actor4,
-    actor5 = actor5,
     studioVotes = studioVotes,
     castVotes = castVotes,
     studioExperience = studioExperience,

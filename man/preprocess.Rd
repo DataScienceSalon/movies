@@ -10,10 +10,11 @@ preprocess(movies)
 \code{preprocess} Performs preprocessing of data for analysis
 }
 \seealso{
-Other movies functions: \code{\link{analyzeCategorical}},
-  \code{\link{analyzeNumeric}}, \code{\link{back}},
+Other movies functions: \code{\link{back}},
   \code{\link{bivariate}}, \code{\link{forward}},
-  \code{\link{process}}, \code{\link{univariate}}
+  \code{\link{multivariateQuant}}, \code{\link{process}},
+  \code{\link{univariateQual}},
+  \code{\link{univariateQuant}}, \code{\link{univariate}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

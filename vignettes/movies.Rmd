@@ -143,15 +143,30 @@ knitr::kable(edaUni$popularity$stats, digits = 2) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
-As indicated by the kurtosis and skewness measures above, and as shown in `r kfigr::figr(label = "popularity", prefix = TRUE, link = TRUE, type="Figure")`, the distribution of popularity score was multimodal and slightly left skewed. 
-```{r popularity}
+<div class = "col2-left">
+
+As indicated by the kurtosis and skewness measures above, and as shown in `r kfigr::figr(label = "popularity-hist", prefix = TRUE, link = TRUE, type="Figure")`, the distribution of popularity score was multimodal and slightly left skewed. 
+```{r popularity-hist}
 edaUni$popularity$hist
 ```
-`r kfigr::figr(label = "popularity", prefix = TRUE, link = TRUE, type="Figure")`: Distribution of movies by popularity
+`r kfigr::figr(label = "popularity-hist", prefix = TRUE, link = TRUE, type="Figure")`: Distribution of movies by popularity
 
+</div>
+
+<div class = "col2-right">
+```{r popularity-qq}
+edaUni$popularity$qq
+```
+`r kfigr::figr(label = "popularity-qq", prefix = TRUE, link = TRUE, type="Figure")`: Popularity Normal Quantile-Quantile Plot
+
+</div>
+```{r popularity-box}
+edaUni$popularity$box
+```
+`r kfigr::figr(label = "popularity-box", prefix = TRUE, link = TRUE, type="Figure")`: Popularity Boxplot
 
 ### Title Type
-Feature films constituted `r edaUni$type$ctable$Proportion[2] * 100`% of the films in the sample. Since the focus of this study was theatrical releases, TV movies, which were included in the raw data were excluded from this analysis.
+Feature films constituted `r edaUni$type$stats$Proportion[2] * 100`% of the films in the sample. Since the focus of this study was theatrical releases, TV movies, which were included in the raw data were excluded from this analysis.
 
 ```{r title_type}
 edaUni$type$plot
@@ -159,14 +174,14 @@ edaUni$type$plot
 `r kfigr::figr(label = "title_type", prefix = TRUE, link = TRUE, type="Figure")`: Films by title type
 
 ### Genre
-The drama genre represented a plurality of the releases in the sample, followed by comedy action & adventure then mystery & suspense. The top four genres account for nearly `r round(sum(head(edaUni$genre$ctable %>% arrange(desc(Proportion)) %>% select(Proportion), 4)) * 100, -1)`% of the films in the sample.
+The drama genre represented a plurality of the releases in the sample, followed by comedy action & adventure then mystery & suspense. The top four genres account for nearly `r round(sum(head(edaUni$genre$stats %>% arrange(desc(Proportion)) %>% select(Proportion), 4)) * 100, -1)`% of the films in the sample.
 ```{r genre}
 edaUni$genre$plot
 ```
 `r kfigr::figr(label = "genre", prefix = TRUE, link = TRUE, type="Figure")`: Films by genre
 
 ### MPAA Rating
-Rated R films accounted for over `r round(edaUni$mpaa$stats$Proportion[5] * 100, -1)`% of the releases, followed by PG and PG-13. Collectively, R, PG, and PG-13 rated films represent `r round(sum(head(edaUni$mpaa$ctable %>% arrange(desc(Proportion)) %>% select(Proportion), 3)) * 100, -1)`% of the films in the sample.
+Rated R films accounted for over `r round(edaUni$mpaa$stats$Proportion[5] * 100, -1)`% of the releases, followed by PG and PG-13. Collectively, R, PG, and PG-13 rated films represent `r round(sum(head(edaUni$mpaa$stats %>% arrange(desc(Proportion)) %>% select(Proportion), 3)) * 100, -1)`% of the films in the sample.
 ```{r mpaa}
 edaUni$mpaa$plot
 ```
@@ -179,14 +194,14 @@ The data included films from `r length(unique(mdb$studio))` studios. Data with r
 The work of `r nrow(unique(mdb$director))` directors was included in the sample provided for this project. Data with respect to the number of films in the sample per director are provided in the Director Experience section below.
 
 ### Season of Theatrical Release
-The plurality of features in the sample were released during the fall and summer months with over `r round(edaUni$season$ctable$Proportion[3] *100, -1)`% opening in the month of December alone. It was not evident that the sample reflects the population of movie releases in the United States. 
+The plurality of features in the sample were released during the fall and summer months with over `r round(edaUni$season$stats$Proportion[3] *100, -1)`% opening in the month of December alone. It was not evident that the sample reflects the population of movie releases in the United States. 
 ```{r season}
 edaUni$season$plot
 ```
 `r kfigr::figr(label = "season", prefix = TRUE, link = TRUE, type="Figure")`: Theatrical releases by season
 
 ### Month of Theatrical Release
-The plurality of features in the sample (`r sum(edaUni$month$ctable$Proportion[c(1,6,10,12)])*100`%) were released during the months of January, June, October and December.  It was not evident that the sample reflects the population of movie releases in the United States. 
+The plurality of features in the sample (`r sum(edaUni$month$stats$Proportion[c(1,6,10,12)])*100`%) were released during the months of January, June, October and December.  It was not evident that the sample reflects the population of movie releases in the United States. 
 ```{r month}
 edaUni$month$plot
 ```
@@ -194,8 +209,8 @@ edaUni$month$plot
 
 ### Releases by IMDB Rating
 IMDB rating is one of the variables that compose the popularity variable.  Its summary statistics were:  
-`r kfigr::figr(label = "imdb_rating_ctable", prefix = TRUE, link = TRUE, type="Table")`: Releases by IMDB rating
-```{r imdb_rating_ctable}
+`r kfigr::figr(label = "imdb_rating_stats", prefix = TRUE, link = TRUE, type="Table")`: Releases by IMDB rating
+```{r imdb_rating_stats}
 knitr::kable(edaUni$imdbRating$stats, digits = 2) %>%  
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
@@ -238,13 +253,13 @@ edaUni$imdbLogVotes$hist
 The summary statistics for Rotten Tomatoes critics scores were:  
 `r kfigr::figr(label = "critics_score_stats", prefix = TRUE, link = TRUE, type="Table")`
 ```{r critics_score_stats}
-knitr::kable(edaUni$criticsScore$stats, digits = 2) %>%  
+knitr::kable(edaUni$criticsScores$stats, digits = 2) %>%  
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
 `r kfigr::figr(label = "critics_score", prefix = TRUE, link = TRUE, type="Figure")` evinces a left skewed the distribution of critics scores with a plurality of ratings at approximately 75. 
 ```{r critics_score}
-edaUni$criticsScore$hist
+edaUni$criticsScores$hist
 ```
 `r kfigr::figr(label = "critics_score", prefix = TRUE, link = TRUE, type="Figure")`: Rotten Tomatoes critics scores
 
@@ -252,13 +267,13 @@ edaUni$criticsScore$hist
 The summary statistics for Rotten Tomatoes audience scores were:  
 `r kfigr::figr(label = "audience_score_stats", prefix = TRUE, link = TRUE, type="Table")`
 ```{r audience_score_stats}
-knitr::kable(edaUni$audienceScore$stats, digits = 2) %>%  
+knitr::kable(edaUni$audienceScores$stats, digits = 2) %>%  
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
 The distribution of audience scores shown in `r kfigr::figr(label = "audience_score", prefix = TRUE, link = TRUE, type="Figure")` mirrors that of critics scores with slightly less spread than the critics scores.
 ```{r audience_score}
-edaUni$audienceScore$hist
+edaUni$audienceScores$hist
 ```
 `r kfigr::figr(label = "audience_score", prefix = TRUE, link = TRUE, type="Figure")`: Rotten Tomatoes audience scores
 
@@ -271,7 +286,7 @@ gridExtra::grid.arrange(edaUni$bestPicNom$plot, edaUni$bestPicWin$plot, ncol = 2
 `r kfigr::figr(label = "best_picture", prefix = TRUE, link = TRUE, type="Figure")`: Best picture nominations and wins
 
 ### Best Director / Actor / Actress 
-As indicated in `r kfigr::figr(label = "best_actor", prefix = TRUE, link = TRUE, type="Figure")`, the percentages of films with best director, actor and actress oscars were `r edaUni$bestDirWin$ctable$Proportion[2] * 100`%, `r edaUni$bestActorWin$ctable$Proportion[2] * 100`%,  and `r edaUni$bestActressWin$ctable$Proportion[2] * 100`%, respectively.  Again, these proportions indicate that oscar awards would not be a good predictor of movie popularity. The bivariate analysis will explore this further.
+As indicated in `r kfigr::figr(label = "best_actor", prefix = TRUE, link = TRUE, type="Figure")`, the percentages of films with best director, actor and actress oscars were `r edaUni$bestDirWin$stats$Proportion[2] * 100`%, `r edaUni$bestActorWin$stats$Proportion[2] * 100`%,  and `r edaUni$bestActressWin$stats$Proportion[2] * 100`%, respectively.  Again, these proportions indicate that oscar awards would not be a good predictor of movie popularity. The bivariate analysis will explore this further.
 
 
 ```{r best_actor}
@@ -287,10 +302,10 @@ edaUni$top200Box$plot
 `r kfigr::figr(label = "top_200", prefix = TRUE, link = TRUE, type="Figure")`: Frequency and proportion of movies by top 200 box office earnings 
 
 ### Studio Votes
-This was a derived variable intended to reflect the popularity of a given studio. `r kfigr::figr(label = "studio_votes_ctable", prefix = TRUE, link = TRUE, type="Table")` provides the summary statistics.  
+This was a derived variable intended to reflect the popularity of a given studio. `r kfigr::figr(label = "studio_votes_stats", prefix = TRUE, link = TRUE, type="Table")` provides the summary statistics.  
 
-`r kfigr::figr(label = "studio_votes_ctable", prefix = TRUE, link = TRUE, type="Table")`: Total IMDB votes by studio summary statistics
-```{r studio_votes_ctable}
+`r kfigr::figr(label = "studio_votes_stats", prefix = TRUE, link = TRUE, type="Table")`: Total IMDB votes by studio summary statistics
+```{r studio_votes_stats}
 knitr::kable(edaUni$studioVotes$stats, digits = 2) %>%  
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
@@ -321,9 +336,9 @@ knitr::kable(head(top10, 10), digits = 0) %>%
 ```
 
 ### Studio Experience
-This was a derived variable intended to reflect the relative experience of a given studio. `r kfigr::figr(label = "studio_experience_ctable", prefix = TRUE, link = TRUE, type="Table")` provides the summary statistics.
-`r kfigr::figr(label = "studio_experience_ctable", prefix = TRUE, link = TRUE, type="Table")`: Studio experience summary statistics
-```{r studio_experience_ctable}
+This was a derived variable intended to reflect the relative experience of a given studio. `r kfigr::figr(label = "studio_experience_stats", prefix = TRUE, link = TRUE, type="Table")` provides the summary statistics.
+`r kfigr::figr(label = "studio_experience_stats", prefix = TRUE, link = TRUE, type="Table")`: Studio experience summary statistics
+```{r studio_experience_stats}
 knitr::kable(edaUni$studioExperience$stats, digits = 2) %>%  
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
@@ -337,9 +352,9 @@ knitr::kable(head(top10, 10), digits = 0) %>%
 ```
 
 ### Director Experience
-This was a derived variable intended to reflect the relative experience of a given director. `r kfigr::figr(label = "director_experience_ctable", prefix = TRUE, link = TRUE, type="Table")` provides the summary statistics.
-`r kfigr::figr(label = "director_experience_ctable", prefix = TRUE, link = TRUE, type="Table")`: Director experience summary statistics
-```{r director_experience_ctable}
+This was a derived variable intended to reflect the relative experience of a given director. `r kfigr::figr(label = "director_experience_stats", prefix = TRUE, link = TRUE, type="Table")` provides the summary statistics.
+`r kfigr::figr(label = "director_experience_stats", prefix = TRUE, link = TRUE, type="Table")`: Director experience summary statistics
+```{r director_experience_stats}
 knitr::kable(edaUni$directorExperience$stats, digits = 2) %>%  
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
@@ -353,14 +368,14 @@ knitr::kable(head(top10, 10), digits = 0) %>%
 ```
 
 ### Film Cast Experience
-This was a derived variable intended to reflect the relative experience of a given cast for a film. `r kfigr::figr(label = "cast_experience_ctable", prefix = TRUE, link = TRUE, type="Table")` provides the summary statistics.
-`r kfigr::figr(label = "cast_experience_ctable", prefix = TRUE, link = TRUE, type="Table")`: Film Cast experience summary statistics
-```{r cast_experience_ctable}
+This was a derived variable intended to reflect the relative experience of a given cast for a film. `r kfigr::figr(label = "cast_experience_stats", prefix = TRUE, link = TRUE, type="Table")` provides the summary statistics.
+`r kfigr::figr(label = "cast_experience_stats", prefix = TRUE, link = TRUE, type="Table")`: Film Cast experience summary statistics
+```{r cast_experience_stats}
 knitr::kable(edaUni$castExperience$stats, digits = 2) %>%  
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
-The top 10 films in terms of relative cast experience
+The top 10 films in terms of relative cast experience are listed in `r kfigr::figr(label = "cast_experience_top10", prefix = TRUE, link = TRUE, type="Table")`.  
 `r kfigr::figr(label = "cast_experience_top10", prefix = TRUE, link = TRUE, type="Table")`: Top 10 films by relative cast experience
 ```{r cast_experience_top10}
 top10 <- unique(mdb %>%  arrange(desc(cast_experience)) %>% select(title, cast_experience))
@@ -368,16 +383,8 @@ knitr::kable(head(top10, 10), digits = 0) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
-
-
-
-
-## Bivariate Analysis
-```{r bivariate}
-edaBi <- movies::bivariate(mdb) 
-```
-Here, the relationships between the response variable, movie popularity, and the explanatory variables listed in `r kfigr::figr(label = "predictors", prefix = TRUE, link = TRUE, type="Table")` are examined. 
-
+### Univariate Wrap-Up
+Having introduced each of the variables and introduced new ones, twelve independent variables were selected for the next stage bivariate analysis and they are listed in `r kfigr::figr(label = "predictors", prefix = TRUE, link = TRUE, type="Table")`.
 `r kfigr::figr(label = "predictors", prefix = TRUE, link = TRUE, type="Table")`: Candidate predictors
 ```{r predictors}
 predictors <- openxlsx::read.xlsx("../data/features.xlsx", sheet = 1)
@@ -386,28 +393,21 @@ knitr::kable(predictors) %>%
   kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
 ```
 
-### Title Type
-As shown in `r kfigr::figr(label = "bi_type", prefix = TRUE, link = TRUE, type="Figure")`, there appears to be a significant difference in mean popularity score at each level of the title type variable.
+Certain variables such as website addresses, film titles and runtimes provided no popularity predictive value. Similarly, studio, director, and actor variables were excluded in favor of their popularity and experience measures. The day of theatrical release as well as DVD release dates were not of interest for this analysis. Categorical scoring variables were excluded in favor of numeric measures. Lastly, dichotomous variables such as the oscar wins and inclusion in the box off top 200 provided insufficient sample size for one (or more) of these levels, as such they were excluded.
 
-```{r bi_type}
-edaBi$type$plot
-```
-`r kfigr::figr(label = "bi_type", prefix = TRUE, link = TRUE, type="Figure")`: Popularity by title type boxplot
 
-`r kfigr::figr(label = "bi_type_mod", prefix = TRUE, link = TRUE, type="Table")`: Linear model of popularity by title type
-```{r bi_type_mod}
-knitr::kable(edaBi$type$mod) %>%  
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
+## Bivariate Analysis
+```{r bivariate}
+mdb <- process(mdb)
+edaBi <- movies::bivariate(mdb) 
 ```
-`r kfigr::figr(label = "bi_type_aov", prefix = TRUE, link = TRUE, type="Table")`: Analysis of variance for popularity by title type
-```{r bi_type_aov}
-knitr::kable(edaBi$type$aov) %>%  
-  kableExtra::kable_styling(bootstrap_options = c("hover", "condensed", "responsive"), full_width = T, position = "center")
-```
-`r kfigr::figr(label = "bi_type_mod", prefix = TRUE, link = TRUE, type="Table")` indicates that the difference in mean popularity scores among documentaries, feature-films, and TV movies was significant. The analysis of variance in `r kfigr::figr(label = "bi_type_aov", prefix = TRUE, link = TRUE, type="Table")` shows that the amount of variance explained by the title type was significant, $F$(`r edaBi$type$aov$df[1]`, `r edaBi$type$aov$df[2]`) = `r round(edaBi$type$aov$statistic[1],0)`, $p$ = `r round(edaBi$type$aov$p.value[1], 3)`. As such, title type was considered a significant predictor of movie popularity.
-
+The objective at this stage is to ascertain the correlation (quantiative independent variable) or the association (categorical independent variable) between movie popularity and the following candidate predictors. To ascertain the suitability of a candidate predictor, statistical inference (i.e., hypothesis testing) was conducted to draw conclusions about how movie popularity relates to various factors, based on the sample of popularity and the explanatory variables. Once conditions were checked, the appropriate Anova / Regression (parametric) or Mann–Whitney U test/ Kruskal-Wallis (non-parametric) tests were conducted. The confidence level for all tests was 95%, yielding a two-sided $\alpha = 0.05$. Decisions were made w.r.t. the relationship between movie popularity and the following factors based upon the probability of observing a test statistic as extreme as the one observed, given the null hypothesis (equal means/ zero slope) was true.
 
 ### Genre
+#### Check Conditions
+**Indpendence**: Each observation in the sample was randomly selected and all observations within and across groups were independent.
+**Normality**:
+
 From `r kfigr::figr(label = "bi_genre", prefix = TRUE, link = TRUE, type="Figure")`, the significance of the effect of genre on popularity score was not evident.  From the baseline score of `r round(edaBi$genre$mod[1,2],0)` for the action & adventure genre, documentaries, dramas, musicals, mysteries and others show significant difference in popularity scores.  
 
 ```{r bi_genre}
@@ -557,6 +557,21 @@ The analysis of variance in `r kfigr::figr(label = "bi_cast_ttl_vote_aov", prefi
 * * *
 
 # Part 4: Modeling
+
+
+To ascertain the suitability of a candidate predictor, statistical inference (i.e., hypothesis testing) was conducted to draw conclusions about how movie popularity relates to various factors, based on the sample of popularity and the explanatory values.
+
+The relationship between movie popularity and an explanatory variable can be described by the equation $Y=β0+β1x$ where:    
+$Y$ is the movie popularity score   
+$β0$ is the $y$-intercept of the regression line  
+$β1$ is the slope of the regression line  
+$x$ is the coded value for the title type   
+The following analysis is only interested in the statistical significance of the slope, $β1$, whereas $β1 \neq 0$ indicates that the explanatory variable $x$ can be used to predict $Y$, movie popularity.
+
+Before making any inferences, the conditions for inference were checked. For categorical variables, 
+linearity, independence of errors, normality of errors, and equal error variance was checked. Next, hypotheses statements were tested whereby $H_0$: $β1 = 0$ and $H_a$: $β1 \neq 0$. The confidence level for all tests was 95%, with a two-tailed $\alhha = 0.05$. Two test statistics were used: (1) the $t$-statistic and (2) the $F$ statistic for analysis of variance.
+
+
 Observations included/omitted
 - title_type == TV removed
 

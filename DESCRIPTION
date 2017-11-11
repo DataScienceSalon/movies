@@ -12,6 +12,7 @@ Encoding: UTF-8
 LazyData: TRUE
 Depends:
     R (>= 3.4.2),
+    data.table,
     dplyr,
     extrafont
 Suggests: knitr,
