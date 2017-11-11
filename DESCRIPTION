@@ -12,13 +12,13 @@ Encoding: UTF-8
 LazyData: TRUE
 Depends:
     R (>= 3.4.2),
-    data.table,
     dplyr,
     extrafont
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
 Imports:
+    broom,
     e1071,
     formatR,
     ggplot2,
@@ -27,6 +27,7 @@ Imports:
     kableExtra,
     kfigr,
     openxlsx,
+    qqplotr,
     RColorBrewer,
     stargazer,
     statsr

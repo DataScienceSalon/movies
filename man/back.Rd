@@ -11,9 +11,9 @@ back(movies)
 }
 \seealso{
 Other movies functions: \code{\link{analyzeCategorical}},
-  \code{\link{analyzeNumeric}}, \code{\link{forward}},
-  \code{\link{learnAudienceSize}},
-  \code{\link{preprocess}}, \code{\link{univariate}}
+  \code{\link{analyzeNumeric}}, \code{\link{bivariate}},
+  \code{\link{forward}}, \code{\link{preprocess}},
+  \code{\link{process}}, \code{\link{univariate}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

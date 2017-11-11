@@ -12,8 +12,8 @@ forward(movies)
 \seealso{
 Other movies functions: \code{\link{analyzeCategorical}},
   \code{\link{analyzeNumeric}}, \code{\link{back}},
-  \code{\link{learnAudienceSize}},
-  \code{\link{preprocess}}, \code{\link{univariate}}
+  \code{\link{bivariate}}, \code{\link{preprocess}},
+  \code{\link{process}}, \code{\link{univariate}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

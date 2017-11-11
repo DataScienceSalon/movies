@@ -4,7 +4,7 @@
 \alias{univariate}
 \title{univariate}
 \usage{
-univariate(movies)
+univariate(mdb)
 }
 \description{
 \code{univariate} Performs univariate analysis of variables
@@ -12,8 +12,8 @@ univariate(movies)
 \seealso{
 Other movies functions: \code{\link{analyzeCategorical}},
   \code{\link{analyzeNumeric}}, \code{\link{back}},
-  \code{\link{forward}}, \code{\link{learnAudienceSize}},
-  \code{\link{preprocess}}
+  \code{\link{bivariate}}, \code{\link{forward}},
+  \code{\link{preprocess}}, \code{\link{process}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

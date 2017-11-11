@@ -4,16 +4,23 @@
 \alias{analyzeCategorical}
 \title{analyzeCategorical}
 \usage{
-analyzeCategorical(data, var)
+analyzeCategorical(data, var, bivariate = FALSE)
+}
+\arguments{
+\item{data}{Data frame containing data to be analyzed}
+
+\item{var}{Character string containing the name of the variable or predictor}
+
+\item{bivariate}{Logical indicating if the analysis is bivariate}
 }
 \description{
 \code{analyzeCategorical} Performs univariate analysis of categorical variables
 }
 \seealso{
 Other movies functions: \code{\link{analyzeNumeric}},
-  \code{\link{back}}, \code{\link{forward}},
-  \code{\link{learnAudienceSize}},
-  \code{\link{preprocess}}, \code{\link{univariate}}
+  \code{\link{back}}, \code{\link{bivariate}},
+  \code{\link{forward}}, \code{\link{preprocess}},
+  \code{\link{process}}, \code{\link{univariate}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}
