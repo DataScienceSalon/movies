@@ -4,12 +4,14 @@
 \alias{univariateQuant}
 \title{univariateQuant}
 \usage{
-univariateQuant(data, yLab)
+univariateQuant(data, yLab, units = NULL)
 }
 \arguments{
 \item{data}{Single column data frame containing the quantitative variable}
 
 \item{yLab}{Capitalized character string for the variable name or label}
+
+\item{units}{Character string indicating the units associated with the quantitative variable.}
 }
 \value{
 analysis List containing:
@@ -25,8 +27,7 @@ and a box plot to check outliers.
 }
 \seealso{
 Other movies functions: \code{\link{back}},
-  \code{\link{bivariate}}, \code{\link{forward}},
-  \code{\link{multivariateQuant}},
+  \code{\link{forward}}, \code{\link{multivariateQuant}},
   \code{\link{preprocess}}, \code{\link{process}},
   \code{\link{univariateQual}}, \code{\link{univariate}}
 }

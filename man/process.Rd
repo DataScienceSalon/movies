@@ -16,14 +16,12 @@ process(mdb)
 }
 \seealso{
 Other movies functions: \code{\link{back}},
-  \code{\link{bivariate}}, \code{\link{forward}},
-  \code{\link{multivariateQuant}},
+  \code{\link{forward}}, \code{\link{multivariateQuant}},
   \code{\link{preprocess}}, \code{\link{univariateQual}},
   \code{\link{univariateQuant}}, \code{\link{univariate}}
 
 Other movies functions: \code{\link{back}},
-  \code{\link{bivariate}}, \code{\link{forward}},
-  \code{\link{multivariateQuant}},
+  \code{\link{forward}}, \code{\link{multivariateQuant}},
   \code{\link{preprocess}}, \code{\link{univariateQual}},
   \code{\link{univariateQuant}}, \code{\link{univariate}}
 }

@@ -4,15 +4,19 @@
 \alias{univariate}
 \title{univariate}
 \usage{
-univariate(mdb)
+univariate(mdb, mdbBox)
+}
+\arguments{
+\item{mdb}{Data frame containing the preprocessed movie data set}
+
+\item{mdbBox}{Data frame containing 100 samples from the mdb data frame with box office revenue added}
 }
 \description{
 \code{univariate} Performs univariate analysis of variables
 }
 \seealso{
 Other movies functions: \code{\link{back}},
-  \code{\link{bivariate}}, \code{\link{forward}},
-  \code{\link{multivariateQuant}},
+  \code{\link{forward}}, \code{\link{multivariateQuant}},
   \code{\link{preprocess}}, \code{\link{process}},
   \code{\link{univariateQual}},
   \code{\link{univariateQuant}}

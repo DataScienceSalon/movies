@@ -11,7 +11,7 @@ forward(movies)
 }
 \seealso{
 Other movies functions: \code{\link{back}},
-  \code{\link{bivariate}}, \code{\link{multivariateQuant}},
+  \code{\link{multivariateQuant}},
   \code{\link{preprocess}}, \code{\link{process}},
   \code{\link{univariateQual}},
   \code{\link{univariateQuant}}, \code{\link{univariate}}

@@ -11,6 +11,9 @@ getSummaryStats(data, xLab = NULL)
 
 \item{xLab}{Character string containing the name of the variable or categorical level}
 }
+\value{
+Data frame containing summary statistics
+}
 \description{
 \code{getSummaryStats} Provides summary stats for quantitative variable
 }

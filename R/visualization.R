@@ -42,17 +42,17 @@ plotFreqProp <- function(data, yLab = "Movies", xLab, order = NULL) {
   # Render plot
   myPal <- colorRampPalette(RColorBrewer::brewer.pal(11, "PiYG"))
   barPlot <- ggplot2::ggplot(data = df,
-                             ggplot2::aes(x = as.numeric(unlist(df[,1])),
-                                          y = as.numeric(unlist(df[,2])),
-                                          fill = as.character(unlist(df[,1]))))  +
+                             ggplot2::aes(x = df[[1]],
+                                          y = df[[2]],
+                                          fill = df[[1]]))  +
     ggplot2::geom_bar(stat='identity') +
     ggplot2::theme_minimal(base_size = 24) +
     ggplot2::geom_text(
       data = df,
-      ggplot2::aes(x = as.numeric(unlist(df[,1])),
-                   y = as.numeric(unlist(df[,5])),
-                   label = paste0(as.numeric(unlist(df[,2])), " (",
-                                  round(as.numeric(unlist(df[,3])) * 100, 0),
+      ggplot2::aes(x = df[[1]],
+                   y = df[[5]],
+                   label = paste0(df[[2]], " (",
+                                  round(df[[3]] * 100, 0),
                                   "%)")),
       colour="black", family="Tahoma", size = 8) +
     ggplot2::theme(text = ggplot2::element_text(family="Open Sans"),
@@ -133,13 +133,14 @@ plotQQ <- function(data, xLab = NULL, yLab) {
     qqplotr::stat_qq_band() +
     qqplotr::stat_qq_line() +
     qqplotr::stat_qq_point() +
+    ggplot2::theme(text = ggplot2::element_text(family="Open Sans")) +
     ggplot2::labs(x = "Theoretical Quantiles", y = "Sample Quantiles") +
     ggplot2::theme_minimal(base_size = 24)
 
   if (is.null(xLab)) {
     qq <- qq + ggplot2::ggtitle(yLab, "Normal Q-Q Plot")
   } else {
-    qq <- qq + ggplot2::ggtitle(paste(yLab, "by", xLab))
+    qq <- qq + ggplot2::ggtitle(paste(yLab, "by", xLab), "Normal Q-Q Plot")
   }
 
   return(qq)

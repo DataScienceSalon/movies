@@ -23,8 +23,7 @@ as a stacked bar plot showing frequencies and percentages.
 }
 \seealso{
 Other movies functions: \code{\link{back}},
-  \code{\link{bivariate}}, \code{\link{forward}},
-  \code{\link{multivariateQuant}},
+  \code{\link{forward}}, \code{\link{multivariateQuant}},
   \code{\link{preprocess}}, \code{\link{process}},
   \code{\link{univariateQuant}}, \code{\link{univariate}}
 }

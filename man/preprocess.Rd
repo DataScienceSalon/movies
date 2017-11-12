@@ -4,16 +4,20 @@
 \alias{preprocess}
 \title{preprocess}
 \usage{
-preprocess(movies)
+preprocess(movies, boxOffice)
+}
+\arguments{
+\item{movies}{Data frame containing the movies data set}
+
+\item{boxOffice}{Data set of 100 randomly selected observations from the movies data set, in which total box office revenue was added.}
 }
 \description{
 \code{preprocess} Performs preprocessing of data for analysis
 }
 \seealso{
 Other movies functions: \code{\link{back}},
-  \code{\link{bivariate}}, \code{\link{forward}},
-  \code{\link{multivariateQuant}}, \code{\link{process}},
-  \code{\link{univariateQual}},
+  \code{\link{forward}}, \code{\link{multivariateQuant}},
+  \code{\link{process}}, \code{\link{univariateQual}},
   \code{\link{univariateQuant}}, \code{\link{univariate}}
 }
 \author{

@@ -5,10 +5,13 @@
 #'
 #' \code{preprocess} Performs preprocessing of data for analysis
 #'
+#' @param movies Data frame containing the movies data set
+#' @param boxOffice Data set of 100 randomly selected observations from the movies data set, in which total box office revenue was added.
+#'
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family movies functions
 #' @export
-preprocess <- function(movies) {
+preprocess <- function(movies, boxOffice) {
 
   #---------------------------------------------------------------------------#
   #                        Extract Variables of Interest                      #
@@ -25,17 +28,41 @@ preprocess <- function(movies) {
   #---------------------------------------------------------------------------#
   #                        Create Season and Month                            #
   #---------------------------------------------------------------------------#
+
   mdb <- mdb %>% mutate(
-    thtr_rel_month = as.character(thtr_rel_month),
+    imdb_num_votes_log = log2(imdb_num_votes),
     thtr_rel_season = ifelse(thtr_rel_month %in% c(3:5), "Spring",
                              ifelse(thtr_rel_month %in% c(6:8), "Summer",
                                     ifelse(thtr_rel_month %in% c(9:11), "Fall",
                                            ifelse(thtr_rel_month %in% c(12), "Holidays", "Winter")))),
-    popularity = 10 * imdb_rating + critics_score + audience_score)
+    thtr_rel_month =
+      ifelse(thtr_rel_month == 1, "Jan",
+             ifelse(thtr_rel_month == 2, "Feb",
+                    ifelse(thtr_rel_month == 3, "Mar",
+                           ifelse(thtr_rel_month == 4, "Apr",
+                                  ifelse(thtr_rel_month == 5, "May",
+                                         ifelse(thtr_rel_month == 6, "Jun",
+                                                ifelse(thtr_rel_month == 7, "Jul",
+                                                       ifelse(thtr_rel_month == 8, "Aug",
+                                                              ifelse(thtr_rel_month == 9, "Sep",
+                                                                     ifelse(thtr_rel_month == 10, "Oct",
+                                                                            ifelse(thtr_rel_month == 11, "Nov",
+                                                                                   "Dec"))))))))))),
+    scores = 10 * imdb_rating + critics_score + audience_score,
+    scores_log = log2(10 * imdb_rating + critics_score + audience_score),
+    votes_imdb_rating = imdb_num_votes * imdb_rating,
+    votes_imdb_rating_log = log2(imdb_num_votes * imdb_rating),
+    votes_critics_score = imdb_num_votes * critics_score,
+    votes_critics_score_log = log2(imdb_num_votes * critics_score),
+    votes_audience_score = imdb_num_votes * audience_score,
+    votes_audience_score_log = log2(imdb_num_votes * audience_score),
+    votes_scores = imdb_num_votes * scores,
+    votes_scores_log = log2(imdb_num_votes * scores))
 
-  mdb$thtr_rel_month <- factor(mdb$thtr_rel_month, levels = c("1", "2", "3", "4",
-                                                              "5", "6", "7", "8",
-                                                              "9", "10", "11", "12"))
+
+  mdb$thtr_rel_month <- factor(mdb$thtr_rel_month, levels = c("Jan", "Feb", "Mar", "Apr",
+                                                              "May", "Jun", "Jul", "Aug",
+                                                              "Sep", "Oct", "Nov", "Dec"))
 
   #---------------------------------------------------------------------------#
   #                        Create Studio Votes                                #
@@ -43,6 +70,7 @@ preprocess <- function(movies) {
   studio <- movies %>% group_by(studio) %>%
     summarize(studio_votes = sum(imdb_num_votes))
   mdb <- left_join(mdb, studio)
+  mdb <- mdb %>% mutate(studio_votes_log = log2(studio_votes))
 
   #---------------------------------------------------------------------------#
   #                           Create Cast Vote                                #
@@ -76,6 +104,7 @@ preprocess <- function(movies) {
 
   # Create cast votes variable
   mdb <- mdb %>% mutate(cast_votes = votes1 + votes2 + votes3 + votes4 + votes5)
+  mdb <- mdb %>% mutate(cast_votes_log = log2(cast_votes))
 
   #---------------------------------------------------------------------------#
   #                        Create Studio Experience                           #
@@ -83,6 +112,7 @@ preprocess <- function(movies) {
   studioExperience <- mdb %>% group_by(studio) %>%
     summarize(studio_experience = n())
   mdb <- left_join(mdb, studioExperience)
+  mdb <- mdb %>% mutate(studio_experience_log = log2(studio_experience))
 
   #---------------------------------------------------------------------------#
   #                        Create Director Experience                         #
@@ -90,7 +120,7 @@ preprocess <- function(movies) {
   directorExperience <- mdb %>% group_by(director) %>%
     summarize(director_experience = n())
   mdb <- left_join(mdb, directorExperience)
-
+  mdb <- mdb %>% mutate(director_experience_log = log2(director_experience))
   #---------------------------------------------------------------------------#
   #                        Create Cast Experience                             #
   #---------------------------------------------------------------------------#
@@ -112,7 +142,19 @@ preprocess <- function(movies) {
   mdb <- left_join(mdb, actors, by = c("actor5" = "actor"))
   names(mdb)[names(mdb) == "cast_experience"] <- "ce5"
   mdb <- mdb %>% mutate(cast_experience = ce1 + ce2 + ce3 + ce4 + ce5)
+  mdb <- mdb %>% mutate(cast_experience_log = log2(cast_experience))
+
+  #---------------------------------------------------------------------------#
+  #                     Create Box Office Sample Set                          #
+  #---------------------------------------------------------------------------#
+  mdbBox <- inner_join(mdb, boxOffice)
+  mdbBox <- mdbBox %>% mutate(box_office_log = log2(box_office))
+
+  data <- list(
+    mdb = mdb,
+    mdbBox = mdbBox
+  )
 
 
-  return(mdb)
+  return(data)
 }
