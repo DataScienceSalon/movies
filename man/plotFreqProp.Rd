@@ -4,7 +4,7 @@
 \alias{plotFreqProp}
 \title{plotFreqProp}
 \usage{
-plotFreqProp(data, yLab = "Movies", xLab, order = NULL)
+plotFreqProp(data, yLab = "Movies", xLab, title = NULL, order = NULL)
 }
 \arguments{
 \item{data}{Data frame or vector containing a single categorical factor variable}
@@ -12,6 +12,8 @@ plotFreqProp(data, yLab = "Movies", xLab, order = NULL)
 \item{yLab}{Capital case character string describing the y variable}
 
 \item{xLab}{Capital case character string containing the name of the variable x variable}
+
+\item{title}{Capital case character string for the title of the plot}
 
 \item{order}{Character c('a', 'd') indicating whether to order by frequency ascending (a), or descending (d)}
 }
@@ -24,8 +26,10 @@ showing frequencies and proportions
 }
 \seealso{
 Other visualization functions: \code{\link{plotBox}},
-  \code{\link{plotHist}}, \code{\link{plotQQ}},
-  \code{\link{plotScatter}}
+  \code{\link{plotCooks}}, \code{\link{plotHist}},
+  \code{\link{plotQQ}}, \code{\link{plotResAll}},
+  \code{\link{plotResFit}}, \code{\link{plotResLeverage}},
+  \code{\link{plotResQQ}}, \code{\link{plotScatter}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

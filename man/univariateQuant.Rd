@@ -14,11 +14,7 @@ univariateQuant(data, yLab, units = NULL)
 \item{units}{Character string indicating the units associated with the quantitative variable.}
 }
 \value{
-analysis List containing:
- 1. Summary Statistics
- 2. Histogram
- 3. Normal quantile plot
- 4. Box plot
+analysis List containing summary statistics, plots and intepretation text.
 }
 \description{
 \code{univariateQuant} Performs univariate analysis on a single quantitative
@@ -27,8 +23,10 @@ and a box plot to check outliers.
 }
 \seealso{
 Other movies functions: \code{\link{back}},
-  \code{\link{forward}}, \code{\link{multivariateQuant}},
+  \code{\link{bivariate}}, \code{\link{forward}},
+  \code{\link{multivariateQuant}},
   \code{\link{preprocess}}, \code{\link{process}},
+  \code{\link{regressionAnalysis}},
   \code{\link{univariateQual}}, \code{\link{univariate}}
 }
 \author{

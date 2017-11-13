@@ -4,7 +4,7 @@
 \alias{plotHist}
 \title{plotHist}
 \usage{
-plotHist(data, xLab = NULL, yLab)
+plotHist(data, xLab = NULL, yLab, title = NULL)
 }
 \arguments{
 \item{data}{Data frame containing a single numeric variable}
@@ -12,6 +12,8 @@ plotHist(data, xLab = NULL, yLab)
 \item{xLab}{Capital case character string the group or subset of data being printed (optional)}
 
 \item{yLab}{Capital case character string describing y is being printed}
+
+\item{title}{Capital case character string for the title of the plot}
 }
 \value{
 List containing a summary statistics and a histogram
@@ -22,8 +24,10 @@ of summary statistics.
 }
 \seealso{
 Other visualization functions: \code{\link{plotBox}},
-  \code{\link{plotFreqProp}}, \code{\link{plotQQ}},
-  \code{\link{plotScatter}}
+  \code{\link{plotCooks}}, \code{\link{plotFreqProp}},
+  \code{\link{plotQQ}}, \code{\link{plotResAll}},
+  \code{\link{plotResFit}}, \code{\link{plotResLeverage}},
+  \code{\link{plotResQQ}}, \code{\link{plotScatter}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

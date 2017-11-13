@@ -4,7 +4,7 @@
 \alias{plotQQ}
 \title{plotQQ}
 \usage{
-plotQQ(data, xLab = NULL, yLab)
+plotQQ(data, xLab = NULL, yLab, title = NULL)
 }
 \arguments{
 \item{data}{Data frame or vector containing a single numeric variable}
@@ -12,6 +12,8 @@ plotQQ(data, xLab = NULL, yLab)
 \item{xLab}{Capital case character string containing the name of the grouping or subset variable (optional)}
 
 \item{yLab}{Capital case character string containing the name of the y variable}
+
+\item{title}{Capital case character string for the title of the plot}
 }
 \value{
 List containing a summary statistics and QQ plot
@@ -22,8 +24,10 @@ of summary statistics.
 }
 \seealso{
 Other visualization functions: \code{\link{plotBox}},
-  \code{\link{plotFreqProp}}, \code{\link{plotHist}},
-  \code{\link{plotScatter}}
+  \code{\link{plotCooks}}, \code{\link{plotFreqProp}},
+  \code{\link{plotHist}}, \code{\link{plotResAll}},
+  \code{\link{plotResFit}}, \code{\link{plotResLeverage}},
+  \code{\link{plotResQQ}}, \code{\link{plotScatter}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

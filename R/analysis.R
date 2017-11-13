@@ -42,3 +42,30 @@ getSummaryStats <- function(data, xLab = NULL) {
   return(df)
 
 }
+
+#------------------------------------------------------------------------------#
+#                 Estimate Sample Size Required for a Proportion               #
+#------------------------------------------------------------------------------#
+#' getPSampleSize
+#'
+#' \code{getPSampleSize} Computes the required sample size for a proportion, such
+#' that the population proportion is within a designated margin of error of the
+#' sample proportion with a designated level of confidence.
+#'
+#' @param p Numeric proportion between 0 and 1
+#' @param conf Numeric confidence level between 0 and 1
+#' @param me Numeric margin of error between 0 and 1
+#'
+#' @return sampleSize Minimum required sample size
+#' @author John James, \email{jjames@@datasciencesalon.org}
+#' @family analysis functions
+#' @export
+getPSampleSize <- function(p, conf = 0.95, me = 0.05) {
+
+  alpha <- 1 - conf
+  z <- alpha/2
+  ss <- round((qnorm(z)^2 * p * (1 - p)) / me^2, 0)
+
+  return(ss)
+}
+

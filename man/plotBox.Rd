@@ -4,7 +4,7 @@
 \alias{plotBox}
 \title{plotBox}
 \usage{
-plotBox(data, xLab = NULL, yLab)
+plotBox(data, xLab = NULL, yLab, title = NULL)
 }
 \arguments{
 \item{data}{Data frame or vector containing two columns:
@@ -14,6 +14,8 @@ plotBox(data, xLab = NULL, yLab)
 \item{xLab}{Capital case character string containing the name of the x variable (optional)}
 
 \item{yLab}{Capital case character string containing the name of the y variable}
+
+\item{title}{Character case character string containing the title for the plot}
 }
 \value{
 List containing a contingency table and a stacked bar plot.
@@ -22,9 +24,11 @@ List containing a contingency table and a stacked bar plot.
 \code{plotBox} Renders a single or grouped box plot.
 }
 \seealso{
-Other visualization functions: \code{\link{plotFreqProp}},
-  \code{\link{plotHist}}, \code{\link{plotQQ}},
-  \code{\link{plotScatter}}
+Other visualization functions: \code{\link{plotCooks}},
+  \code{\link{plotFreqProp}}, \code{\link{plotHist}},
+  \code{\link{plotQQ}}, \code{\link{plotResAll}},
+  \code{\link{plotResFit}}, \code{\link{plotResLeverage}},
+  \code{\link{plotResQQ}}, \code{\link{plotScatter}}
 }
 \author{
 John James, \email{jjames@datasciencesalon.org}

@@ -37,7 +37,7 @@ knitr::knit_hooks$set(inline = function(x) {
 
 ```{r load-data}
 load("../data/movies.Rdata")
-load("../data/boxOffice.Rdata")
+load("../data/mdb2.Rdata")
 ```
 
 ```{r load-libraries}
@@ -47,13 +47,13 @@ library(ggplot2)
 ```
 
 ```{r preprocess}
-dataSets  <- movies::preprocess(movies, boxOffice)
-mdb <- dataSets$mdb
-mdbBox <- dataSets$mdbBox
+dataSets  <- movies::preprocess(movies, mdb2)
+mdb1 <- dataSets$mdb
+mdb2 <- dataSets$mdbBox
 ```
 
 # Part 1: Data
-The data were comprised of audience and critics opinions, awards, studio, and actor information from Rotten Tomatoes, IMDB, and BoxOfficeMojo.com for a random sample of 651 movies produced and released prior to 2016. 
+The data were comprised of audience and critics opinions, awards, studio, and actor information from Rotten Tomatoes, imdb, and BoxOfficeMojo.com for a random sample of 651 movies produced and released prior to 2016. 
 
 ## Data Sources
 ### Rotten Tomatoes
@@ -107,7 +107,7 @@ where:
 $v$ is the sum of IMDB cast votes for the film  
 $V_i$ is the sum of allocated IMDB cast votes for actor $i$  
 
-IMDB votes were allocated to cast members as follows:  
+imdb votes were allocated to cast members as follows:  
 * 40% of total film IMDB votes for actor1    
 * 30% of total film IMDB votes for actor2   
 * 15% of total film IMDB votes for actor3  
@@ -127,7 +127,7 @@ knitr::kable(omitted) %>%
 ```
 
 ## Data Cleaning
-The variables of interest were obtained from the data and complete cases were extracted reducing the number of observations from 651 to `r nrow(mdb)`.
+The variables of interest were obtained from the data and complete cases were extracted reducing the number of observations from 651 to `r nrow(mdb1)`.
 
 * * *
 
@@ -145,7 +145,7 @@ The exploratory data analysis began with a data preprocessing step to extract co
 
 ## Univariate Analysis
 ```{r univariate}
-edaUni <- movies::univariate(mdb, mdbBox)  
+edaUni <- movies::univariate(mdb1, mdb2)  
 ```
 ### Univariate Analysis of Categorical Variables
 The purpose of the univariate analysis of categorical variables was to examine the relative frequencies and proportions of observations for each level of the categorical level.  Categorical levels with fewer than five observations were removed from further analysis.
@@ -182,10 +182,10 @@ edaUni$mpaa$plot
 `r kfigr::figr(label = "mpaa", prefix = TRUE, link = TRUE, type="Figure")`: Films by MPAA Rating
 
 #### Studio
-The data included films from `r length(unique(mdb$studio))` studios. Data with respect to the number of films in the sample per studio are captured in the studio experience variable below.
+The data included films from `r length(unique(mdb1$studio))` studios. Data with respect to the number of films in the sample per studio are captured in the studio experience variable below.
 
 #### Director
-The work of `r length(unique(mdb$director))` directors was included in the sample provided for this project. Data with respect to the number of films in the sample per director are captured in the director experience variable below.
+The work of `r length(unique(mdb1$director))` directors was included in the sample provided for this project. Data with respect to the number of films in the sample per director are captured in the director experience variable below.
 
 #### Season of Theatrical Release
 The plurality of features in the sample were released during the fall and summer months with over `r round(edaUni$season$stats$Proportion[3] *100, -1)`% opening in the month of December alone. 
@@ -888,10 +888,11 @@ edaUni$boxOfficeLog$box
 
 
 ## Bivariate Analysis
-```{r process, fig.height=4}
-dataSets <- process(mdb, mdbBox)
-mdb <- dataSets$mdb
-mdbBox <- dataSets$mdbBox
+```{r bivariate}
+# dataSets <- list()
+# dataSets[["mdb1"]] <- movies::process(data = mdb1)
+# dataSets[["mdb2"]] <- movies::process(data = mdb2)
+# edaBi1 <- bivariate(dataSets)
 ```
 The objective at this stage is to ascertain the correlation (quantiative independent variable) or the association (categorical independent variable) between movie popularity and the following candidate predictors. To ascertain the suitability of a candidate predictor, statistical inference (i.e., hypothesis testing) was conducted to draw conclusions about how movie popularity relates to various factors, based on the sample of popularity and the explanatory variables. Once conditions were checked, the appropriate Anova / Regression (parametric) or Mann–Whitney U test/ Kruskal-Wallis (non-parametric) tests were conducted. The confidence level for all tests was 95%, yielding a two-sided $\alpha = 0.05$. Decisions were made w.r.t. the relationship between movie popularity and the following factors based upon the probability of observing a test statistic as extreme as the one observed, given the null hypothesis (equal means/ zero slope) was true.
 

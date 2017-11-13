@@ -25,8 +25,10 @@ and a box plot to check outliers.
 }
 \seealso{
 Other movies functions: \code{\link{back}},
-  \code{\link{forward}}, \code{\link{preprocess}},
-  \code{\link{process}}, \code{\link{univariateQual}},
+  \code{\link{bivariate}}, \code{\link{forward}},
+  \code{\link{preprocess}}, \code{\link{process}},
+  \code{\link{regressionAnalysis}},
+  \code{\link{univariateQual}},
   \code{\link{univariateQuant}}, \code{\link{univariate}}
 }
 \author{

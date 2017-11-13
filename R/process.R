@@ -3,23 +3,16 @@
 #==============================================================================#
 #' process
 #'
-#' \code{process} Pepares the data for the bivariate analysis stage
+#' \code{process} Prepares the data for the bivariate analysis stage
 #'
-#' @param mdb Data frame containing the modified movie data sest
-#' @param mdbBox Data frame containing 100 random samples from mdb with box office revenue added
+#' @param data Data frame containing movie data
 #'
-#' @return list containing processed mdb and mdbBox data frames
+#' @return df Data frame of clean movie data
 #'
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family movies functions
 #' @export
-process <- function(mdb, mdbBox) {
-  mdb <- mdb %>% filter(title_type != "TV Movie" & imdb_rating != "NC-17")
-  mdbBox <- mdbBox %>% filter(title_type != "TV Movie" & imdb_rating != "NC-17")
-
-  dataSets <- list(
-    mdb = mdb,
-    mdbBox = mdbBox
-  )
-  return(dataSets)
+process <- function(data) {
+  df <- data %>% filter(title_type != "TV Movie" & imdb_rating != "NC-17")
+  return(df)
 }

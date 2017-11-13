@@ -5,81 +5,81 @@
 #'
 #' \code{univariate} Performs univariate analysis of variables
 #'
-#' @param mdb Data frame containing the preprocessed movie data set
-#' @param mdbBox Data frame containing 100 samples from the mdb data frame with box office revenue added
+#' @param mdb1 Data frame containing the preprocessed movie data set
+#' @param mdb2 Data frame containing 100 samples from the mdb data frame with box office revenue added
 #'
 #' @author John James, \email{jjames@@datasciencesalon.org}
 #' @family movies functions
 #' @export
-univariate <- function(mdb, mdbBox) {
+univariate <- function(mdb1, mdb2) {
 
   # Conduct Qualitative Analysis
-  type <- univariateQual(as.data.frame(mdb$title_type), xLab = "Title Type")
-  genre <- univariateQual(as.data.frame(mdb$genre), xLab = "Genre")
-  mpaa <- univariateQual(as.data.frame(mdb$mpaa_rating), xLab = "MPAA Rating")
-  season <- univariateQual(as.data.frame(mdb$thtr_rel_season), xLab = "Season")
-  month <- univariateQual(as.data.frame(mdb$thtr_rel_month), xLab = "Month")
-  bestPicNom <- univariateQual(as.data.frame(mdb$best_pic_nom), xLab = "Best Picture Oscar Nomination")
-  bestPicWin <- univariateQual(as.data.frame(mdb$best_pic_win), xLab = "Best Picture Oscar")
-  bestDirWin <- univariateQual(as.data.frame(mdb$best_dir_win), xLab = "Best Director Oscar")
-  bestActorWin <- univariateQual(as.data.frame(mdb$best_actor_win), xLab = "Best Actor Oscar")
-  bestActressWin <- univariateQual(as.data.frame(mdb$best_actress_win), xLab = "Best Actress Oscar")
-  top200Box <- univariateQual(as.data.frame(mdb$top200_box), xLab = "Top 200 Box Office")
+  type <- univariateQual(as.data.frame(mdb1$title_type), xLab = "Title Type")
+  genre <- univariateQual(as.data.frame(mdb1$genre), xLab = "Genre")
+  mpaa <- univariateQual(as.data.frame(mdb1$mpaa_rating), xLab = "MPAA Rating")
+  season <- univariateQual(as.data.frame(mdb1$thtr_rel_season), xLab = "Season")
+  month <- univariateQual(as.data.frame(mdb1$thtr_rel_month), xLab = "Month")
+  bestPicNom <- univariateQual(as.data.frame(mdb1$best_pic_nom), xLab = "Best Picture Oscar Nomination")
+  bestPicWin <- univariateQual(as.data.frame(mdb1$best_pic_win), xLab = "Best Picture Oscar")
+  bestDirWin <- univariateQual(as.data.frame(mdb1$best_dir_win), xLab = "Best Director Oscar")
+  bestActorWin <- univariateQual(as.data.frame(mdb1$best_actor_win), xLab = "Best Actor Oscar")
+  bestActressWin <- univariateQual(as.data.frame(mdb1$best_actress_win), xLab = "Best Actress Oscar")
+  top200Box <- univariateQual(as.data.frame(mdb1$top200_box), xLab = "Top 200 Box Office")
 
   # Conduct Quantitative Analysis
-  studioExperience <- univariateQuant(data.frame(mdb$title, mdb$studio_experience),
+  studioExperience <- univariateQuant(data.frame(mdb1$title, mdb1$studio_experience),
                                       yLab = "Studio Experience", units = "films")
-  studioExperienceLog <- univariateQuant(data.frame(mdb$title, mdb$studio_experience_log),
+  studioExperienceLog <- univariateQuant(data.frame(mdb1$title, mdb1$studio_experience_log),
                                       yLab = "Studio Experience", units = "log(films)")
-  directorExperience <- univariateQuant(data.frame(mdb$title, mdb$director_experience),
+  directorExperience <- univariateQuant(data.frame(mdb1$title, mdb1$director_experience),
                                         yLab = "Director Experience", units = "films")
-  directorExperienceLog <- univariateQuant(data.frame(mdb$title, mdb$director_experience_log),
+  directorExperienceLog <- univariateQuant(data.frame(mdb1$title, mdb1$director_experience_log),
                                         yLab = "Director Experience", units = "log(films)")
-  castExperience <- univariateQuant(data.frame(mdb$title, mdb$cast_experience),
+  castExperience <- univariateQuant(data.frame(mdb1$title, mdb1$cast_experience),
                                     yLab = "Cast Experience", units = "films")
-  castExperienceLog <- univariateQuant(data.frame(mdb$title, mdb$cast_experience_log),
+  castExperienceLog <- univariateQuant(data.frame(mdb1$title, mdb1$cast_experience_log),
                                     yLab = "Cast Experience", units = "log(films)")
-  imdbVotes <- univariateQuant(data.frame(mdb$title, mdb$imdb_num_votes),
+  imdbVotes <- univariateQuant(data.frame(mdb1$title, mdb1$imdb_num_votes),
                                yLab = "IMDB Votes", units = "votes")
-  imdbVotesLog <- univariateQuant(data.frame(mdb$title, mdb$imdb_num_votes_log),
+  imdbVotesLog <- univariateQuant(data.frame(mdb1$title, mdb1$imdb_num_votes_log),
                                   yLab = "IMDB Log Votes", units = "log votes")
-  imdbRating <- univariateQuant(data.frame(mdb$title, mdb$imdb_rating),
+  imdbRating <- univariateQuant(data.frame(mdb1$title, mdb1$imdb_rating),
                                yLab = "IMDB Rating", units = "points")
-  criticsScores <- univariateQuant(data.frame(mdb$title, mdb$critics_score),
+  criticsScores <- univariateQuant(data.frame(mdb1$title, mdb1$critics_score),
                                    yLab = "Critics Score", units = "points")
-  audienceScores <- univariateQuant(data.frame(mdb$title, mdb$critics_score),
+  audienceScores <- univariateQuant(data.frame(mdb1$title, mdb1$critics_score),
                                     yLab = "Audience Score", units = "points")
-  studioVotes <- univariateQuant(data.frame(mdb$title, mdb$studio_votes),
+  studioVotes <- univariateQuant(data.frame(mdb1$title, mdb1$studio_votes),
                                  yLab = "Studio Votes", units = "votes")
-  studioVotesLog <- univariateQuant(data.frame(mdb$title, mdb$studio_votes_log),
+  studioVotesLog <- univariateQuant(data.frame(mdb1$title, mdb1$studio_votes_log),
                                  yLab = "Log Studio Votes", units = "log(votes)")
-  castVotes <- univariateQuant(data.frame(mdb$title, mdb$cast_votes),
+  castVotes <- univariateQuant(data.frame(mdb1$title, mdb1$cast_votes),
                                yLab = "Cast Votes", units = "votes")
-  castVotesLog <- univariateQuant(data.frame(mdb$title, mdb$cast_votes_log),
+  castVotesLog <- univariateQuant(data.frame(mdb1$title, mdb1$cast_votes_log),
                                yLab = "Log Cast Votes", units = "log(votes)")
-  scores <- univariateQuant(data.frame(mdb$title, mdb$scores),
+  scores <- univariateQuant(data.frame(mdb1$title, mdb1$scores),
                             yLab = "Total Scores", units = "points")
-  scoresLog <- univariateQuant(data.frame(mdb$title, mdb$scores_log),
+  scoresLog <- univariateQuant(data.frame(mdb1$title, mdb1$scores_log),
                             yLab = "Log Total Scores", units = "points")
-  votesImdbRating <- univariateQuant(data.frame(mdb$title, mdb$votes_imdb_rating),
+  votesImdbRating <- univariateQuant(data.frame(mdb1$title, mdb1$votes_imdb_rating),
                                      yLab = "Votes * IMDB Rating", units = "points")
-  votesImdbRatingLog <- univariateQuant(data.frame(mdb$title, mdb$votes_imdb_rating_log),
+  votesImdbRatingLog <- univariateQuant(data.frame(mdb1$title, mdb1$votes_imdb_rating_log),
                                         yLab = "Log(Votes * IMDB Rating)", units = "log points")
-  votesCriticsScore <- univariateQuant(data.frame(mdb$title, mdb$votes_critics_score),
+  votesCriticsScore <- univariateQuant(data.frame(mdb1$title, mdb1$votes_critics_score),
                                        yLab = "Votes * Critics Score", units = "points")
-  votesCriticsScoreLog <- univariateQuant(data.frame(mdb$title, mdb$votes_critics_score_log),
+  votesCriticsScoreLog <- univariateQuant(data.frame(mdb1$title, mdb1$votes_critics_score_log),
                                           yLab = "Log(Votes * Critics Score)", units = "log points")
-  votesAudienceScore <- univariateQuant(data.frame(mdb$title, mdb$votes_audience_score),
+  votesAudienceScore <- univariateQuant(data.frame(mdb1$title, mdb1$votes_audience_score),
                                         yLab = "Votes * Audience Score", units = "points")
-  votesAudienceScoreLog <- univariateQuant(data.frame(mdb$title, mdb$votes_audience_score_log),
+  votesAudienceScoreLog <- univariateQuant(data.frame(mdb1$title, mdb1$votes_audience_score_log),
                                            yLab = "Log(Votes * Audience Score)", units = "log points")
-  votesScores <- univariateQuant(data.frame(mdb$title, mdb$votes_scores),
+  votesScores <- univariateQuant(data.frame(mdb1$title, mdb1$votes_scores),
                                  yLab = "Votes * Total Score", units = "points")
-  votesScoresLog <- univariateQuant(data.frame(mdb$title, mdb$votes_scores_log),
+  votesScoresLog <- univariateQuant(data.frame(mdb1$title, mdb1$votes_scores_log),
                                     yLab = "Log(Votes * Total Score)", units = "log points")
-  boxOffice <- univariateQuant(data.frame(mdbBox$title, mdbBox$box_office),
+  boxOffice <- univariateQuant(data.frame(mdb2$title, mdb2$box_office),
                                  yLab = "Box Office", units = "dollars")
-  boxOfficeLog <- univariateQuant(data.frame(mdbBox$title, mdbBox$box_office_log),
+  boxOfficeLog <- univariateQuant(data.frame(mdb2$title, mdb2$box_office_log),
                                yLab = "Log Box Office", units = "log(dollars)")
 
 
